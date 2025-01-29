@@ -1,5 +1,4 @@
-# AskNEU
-MLOps Project [Team - 18]
+# AskNEU - MLOps Project [Team - 18]
 
  AskNEU is a conversational Retrieval-Augmented Generation (RAG) system designed to transform how users interact with Northeastern University's vast repository of information. AskNEU delivers accurate, context-aware answers to user queries in real time by integrating advanced AI language models with targeted data retrieval techniques. Whether you're a prospective student exploring academic programs, a current student navigating campus resources, or a faculty member seeking policy details, AskNEU serves as your intelligent assistant.
  
