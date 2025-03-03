@@ -6,12 +6,6 @@ Traditional information retrieval systems often require users to sift through mu
 
 The project is driven by the goal of providing accurate information for the Northeastern community. AskNEU bridges the gap between complex institutional data and user-friendly communication. Our vision is to create a system that not only answers questions but also anticipates user needs, providing proactive suggestions and insights. This project represents a significant step forward in making institutional knowledge more accessible, intuitive, and engaging for everyone connected to Northeastern University.
 
-Below is a well-structured `README.md` file tailored to the provided project structure and DAG files. It follows the instructions given, including setup steps, pipeline execution, code structure explanation, and reproducibility details with DVC.
-
----
-
-Below is an updated `README.md` incorporating the additional instructions about Docker Compose, Airflow credentials, connection setup, variables, and the expected GCS outcome. I've integrated this with the previous content for clarity and completeness.
-
 ---
 
 # Web Scraping and Embedding Pipeline
