@@ -8,10 +8,6 @@ The project is driven by the goal of providing accurate information for the Nort
 
 ---
 
-# Web Scraping and Embedding Pipeline
-
-This repository contains an automated data pipeline built with Apache Airflow to scrape web data, store it in Google Cloud Storage (GCS), version it with DVC, and process it into embeddings stored in Pinecone. The pipeline is designed for modularity, reproducibility, and scalability, adhering to Python PEP 8 standards.
-
 ## Table of Contents
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
