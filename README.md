@@ -57,8 +57,8 @@ The project is driven by the goal of providing accurate information for the Nort
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo/Data-Pipeline
+   git clone https://github.com/justin-aj/AskNEU.git
+   cd AskNEU/Data-Pipeline
    ```
 
 2. **Set Up Docker Compose**:
