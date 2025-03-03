@@ -9,7 +9,7 @@ The project is driven by the goal of providing accurate information for the Nort
 ---
 
 ## Table of Contents
-- [Project Structure](#project-structure)
+- [Data Pipeline Structure Structure](#data-pipeline-structure)
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
 - [Running the Pipeline](#running-the-pipeline)
@@ -21,7 +21,7 @@ The project is driven by the goal of providing accurate information for the Nort
 
 ---
 
-## Project Structure
+## Data Pipeline Structure
 
 ```
 /Project Repo
