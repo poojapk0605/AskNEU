@@ -1,0 +1,12 @@
+pinecone-client>=2.2.1
+openai>=1.0.0
+cohere-api>=4.3.0
+transformers>=4.30.0
+torch>=2.0.0
+langchain-core>=0.1.0
+langchain-community>=0.0.10
+langchain>=0.1.0
+numpy>=1.24.0
+pandas>=2.0.0
+python-dotenv>=1.0.0
+tqdm>=4.65.0
