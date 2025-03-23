@@ -26,9 +26,11 @@ The system requires an input file named `question.xlsx` with the following colum
 ## Evaluation Metrics
 
 The system evaluates model responses on 5 RAGAS metrics, which may include:
-- Faithfulness: Measures if the generated answer is factually consistent with the ground truth
-- Answer Relevancy: Assesses how relevant the answer is to the question
-- And other applicable metrics based on the RAGAS framework
+    - Relevance: Does the response directly address the query? Does it stay on-topic and relate well to the question?
+    - Accuracy: Is the information provided factually correct? Does the answer align with the provided ground truth?
+    - Completeness: Does the response cover all necessary aspects of the question? Are there any important details left out?
+    - Clarity: Is the response easy to understand? Is the language clear, and is the meaning conveyed effectively?
+    - Conciseness: Is the response free from unnecessary information? Does it avoid verbosity while answering thoroughly?
 
 ## CI/CD Integration
 
