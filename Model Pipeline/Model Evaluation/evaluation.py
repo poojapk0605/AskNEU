@@ -136,9 +136,6 @@ def process_excel_file(file_path, client, batch_size=10):
                     # Update the dataframe
                     df.loc[j, result_columns] = scores
                     pbar.update(1)
-                
-                # Save intermediate results
-                df.to_excel("evaluation_results_in_progress.xlsx", index=False)
         
         # Save final results
         output_file = "evaluation_results_final.xlsx"
