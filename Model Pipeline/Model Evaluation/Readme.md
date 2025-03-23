@@ -1,4 +1,4 @@
-# Model Evaluation
+# Model Evaluation & Bias
 
 This directory contains tools for evaluating model-generated answers against ground truth using RAGAS (Retrieval Augmented Generation Assessment).
 
