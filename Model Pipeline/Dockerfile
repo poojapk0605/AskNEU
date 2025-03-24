@@ -12,12 +12,13 @@ COPY ["Model Pipeline/Model Evaluation/requirements.txt", "./requirements.txt"]
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY ["Model Pipeline/model.py", "./model.py"]
+COPY ["Model Pipeline/Model Evaluation/config.py", "./config.py"]
+COPY ["Model Pipeline/Model Evaluation/model.py", "./model.py"]
 
 # Expose port for Streamlit
 EXPOSE 8080
 
-# Set environment variables
+# Set environment variables (these will be overridden by runtime secrets)
 ENV STREAMLIT_SERVER_PORT=8080
 ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_SERVER_ENABLE_CORS=false
