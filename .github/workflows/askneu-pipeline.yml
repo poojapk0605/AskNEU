@@ -1,11 +1,6 @@
 name: AskNEU CI/CD Pipeline
 
 on:
-  push:
-    paths:
-      - 'Model Pipeline/Dockerfile'       # Trigger when Dockerfile is updated
-      - 'Model Pipeline/Model Evaluation/send_email_oauth2.py' # Trigger when email-related Python file is updated
-
   workflow_run:
     workflows: ["Validation and Bias Check Pipeline"]
     types:
