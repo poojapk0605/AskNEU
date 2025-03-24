@@ -1,3 +1,4 @@
+import os
 # Configuration file for NEU Chatbot
 
 
