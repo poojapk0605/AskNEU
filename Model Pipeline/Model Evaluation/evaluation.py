@@ -8,10 +8,7 @@ from tqdm import tqdm
 # Initialize OpenAI client
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
-<<<<<<< HEAD
 
-=======
->>>>>>> cee2d1a0c55928e98766d68993702e41edc7baed
 
 def create_evaluation_prompt(question, ground_truth, answer):
     """Create a structured evaluation prompt."""
