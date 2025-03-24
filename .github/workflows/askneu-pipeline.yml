@@ -5,6 +5,13 @@ on:
     workflows: ["Validation and Bias Check Pipeline"]
     types:
       - completed
+  push:
+    paths:
+      - 'Model Pipeline/model.py'
+      - 'Model Pipeline/config.py'
+      - 'Model Pipeline/Dockerfile'
+      
+  workflow_dispatch:
 
 jobs:
   deploy_to_cloud_run:
