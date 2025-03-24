@@ -18,7 +18,7 @@ jobs:
           
       - name: Build Docker image
         run: |
-          docker build -t askneu-chatbot:${{ github.sha }} .
+          docker build -f "Model Pipeline/Dockerfile" -t askneu-chatbot:${{ github.sha }} .
           
       - name: Push to Artifact Registry
         env:

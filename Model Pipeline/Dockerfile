@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
-COPY requirements.txt .
+COPY "Model Evaluation/requirements.txt" ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY "Model Pipeline/model.py" .
+COPY model.py .
 
 # Expose port for Streamlit
 EXPOSE 8080
@@ -23,4 +23,4 @@ ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_SERVER_ENABLE_CORS=false
 
 # Run the application
-CMD ["streamlit", "run", "Model Pipeline/model.py"]
+CMD ["streamlit", "run", "model.py"]
