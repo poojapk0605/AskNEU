@@ -24,4 +24,5 @@ ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_SERVER_ENABLE_CORS=false
 
 # Run the application
+ENV PYTHONPATH=/app
 CMD ["streamlit", "run", "model.py"]
