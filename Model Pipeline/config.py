@@ -1,5 +1,7 @@
 import os
-# API Keys
+print("Config file loaded")
+print(f"PINECONE_API_KEY: {os.environ.get('PINECONE_API_KEY')}")
+
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 COHERE_API_KEY = os.environ.get("COHERE_API_KEY")
