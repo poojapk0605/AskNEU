@@ -123,7 +123,7 @@ def process_excel_file(file_path, client, batch_size=10):
                     df.loc[j, result_columns] = scores
                     pbar.update(1)
         
-        output_file = "bias_evaluation_final.xlsx"
+        output_file = "Model Pipeline/Model Evaluation/bias_evaluation_final.xlsx"
         df.to_excel(output_file, index=False)
         print(f"Evaluation complete. Results saved to {output_file}")
         return df
@@ -133,7 +133,7 @@ def process_excel_file(file_path, client, batch_size=10):
         return None
 
 def main():
-    input_file = "bias_question.xlsx"
+    input_file = "Model Pipeline/Model Evaluation/bias_question.xlsx"
     if not api_key:
         print("Error: OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
         return
