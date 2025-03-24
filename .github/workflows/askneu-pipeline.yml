@@ -10,23 +10,19 @@ on:
       - 'Model Pipeline/model.py'
       - 'Model Pipeline/config.py'
       - 'Model Pipeline/Dockerfile'
-      
-  workflow_dispatch:
 
 jobs:
   deploy_to_cloud_run:
     runs-on: ubuntu-latest
-    
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'push' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-          
+      
       - name: Build Docker image
         run: |
           docker build -f "Model Pipeline/Dockerfile" -t askneu-chatbot:${{ github.sha }} .
-          
+      
       - name: Push to Artifact Registry
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -40,7 +36,7 @@ jobs:
           docker tag askneu-chatbot:${{ github.sha }} us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:latest
           docker push us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:${{ github.sha }}
           docker push us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:latest
-          
+      
       - name: Deploy to Cloud Run
         env:
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
@@ -55,7 +51,7 @@ jobs:
             --region us-central1 \
             --allow-unauthenticated \
             --set-env-vars="PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }},OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},COHERE_API_KEY=${{ secrets.COHERE_API_KEY }}"
-          
+
       - name: Send email notification
         if: always()
         env:
