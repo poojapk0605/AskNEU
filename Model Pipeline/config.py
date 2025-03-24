@@ -1,7 +1,4 @@
 import os
-# Configuration file for NEU Chatbot
-
-
 # API Keys
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
