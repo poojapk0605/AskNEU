@@ -2,7 +2,7 @@ import os
 import sys
 from config import *
 print("Config imported successfully")
-print(f"VECTOR_DB_NAME: {config.VECTOR_DB_NAME}")
+print("VECTOR_DB_NAME: {VECTOR_DB_NAME}")
 import pinecone
 from openai import OpenAI
 import cohere
@@ -28,7 +28,7 @@ class NEUChatbot:
     def setup_clients(self):
         """Set up all required API clients based on configuration"""
         # Initialize Vector Database (Pinecone)
-        if config.VECTOR_DB_NAME.lower() == "pinecone":
+        if VECTOR_DB_NAME.lower() == "pinecone":
             self.pc = pinecone.Pinecone(api_key=config.PINECONE_API_KEY)
             
             if config.PINECONE_INDEX_NAME in self.pc.list_indexes().names():
