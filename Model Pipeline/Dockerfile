@@ -12,8 +12,8 @@ COPY ["Model Pipeline/Model Evaluation/requirements.txt", "./requirements.txt"]
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY ["Model Pipeline/Model Evaluation/config.py", "./config.py"]
-COPY ["Model Pipeline/Model Evaluation/model.py", "./model.py"]
+COPY ["Model Pipeline/config.py", "./config.py"]
+COPY ["Model Pipeline/model.py", "./model.py"]
 
 # Expose port for Streamlit
 EXPOSE 8080
