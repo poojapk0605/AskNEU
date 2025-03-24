@@ -9,7 +9,7 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 import warnings
 import transformers
-import config  
+from config import *
 # Suppress specific warnings
 warnings.filterwarnings("ignore", message="Some weights of .* were not initialized")
 transformers.logging.set_verbosity_error()
