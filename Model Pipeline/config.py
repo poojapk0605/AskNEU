@@ -1,9 +1,10 @@
 # Configuration file for NEU Chatbot
 
+
 # API Keys
-PINECONE_API_KEY = "pinecone_key"
-OPENAI_API_KEY = "openai-api_key"
-COHERE_API_KEY = "coehere_api_key"
+PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+COHERE_API_KEY = os.environ.get("COHERE_API_KEY")
 
 # Vector Database Settings
 VECTOR_DB_NAME = "pinecone"  
