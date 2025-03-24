@@ -1,6 +1,8 @@
 import os
 import sys
-print("Python path:", sys.path)
+from config import *
+print("Config imported successfully")
+print(f"VECTOR_DB_NAME: {config.VECTOR_DB_NAME}")
 import pinecone
 from openai import OpenAI
 import cohere
@@ -12,7 +14,6 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 import warnings
 import transformers
-from config import *
 
 # Suppress specific warnings
 warnings.filterwarnings("ignore", message="Some weights of .* were not initialized")
