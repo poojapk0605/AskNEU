@@ -15,14 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ["Model Pipeline/model.py", "./model.py"]
 COPY ["Model Pipeline/config.py", "./config.py"]
 
-# Expose port for Streamlit
-EXPOSE 8080
-
-# Set environment variables
-ENV STREAMLIT_SERVER_PORT=8080
-ENV STREAMLIT_SERVER_ENABLE_CORS=false
-ENV STREAMLIT_SERVER_HEADLESS=true
 
 # Run the application
 ENV PYTHONPATH=/app
-CMD ["streamlit", "run", "model.py"]
+CMD ["python", "model.py"]
