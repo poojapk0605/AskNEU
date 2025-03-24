@@ -1,3 +1,4 @@
+import os
 import pinecone
 from openai import OpenAI
 import cohere
@@ -211,6 +212,8 @@ class NEUChatbot:
         return answer
 
 def main():
+    print("Current working directory:", os.getcwd())
+    print("Files in current directory:", os.listdir())
     # Initialize the chatbot
     print("Initializing NEU Chatbot...")
     chatbot = NEUChatbot()
