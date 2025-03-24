@@ -12,7 +12,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY app3.py .
+COPY "Model Pipeline/model.py" .
 
 # Expose port for Streamlit
 EXPOSE 8080
@@ -23,4 +23,4 @@ ENV STREAMLIT_SERVER_HEADLESS=true
 ENV STREAMLIT_SERVER_ENABLE_CORS=false
 
 # Run the application
-CMD ["streamlit", "run", "app3.py"]
+CMD ["streamlit", "run", "Model Pipeline/model.py"]
