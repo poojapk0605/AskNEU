@@ -29,35 +29,35 @@ class NEUChatbot:
         """Set up all required API clients based on configuration"""
         # Initialize Vector Database (Pinecone)
         if VECTOR_DB_NAME.lower() == "pinecone":
-            self.pc = pinecone.Pinecone(api_key=config.PINECONE_API_KEY)
+            self.pc = pinecone.Pinecone(api_key=PINECONE_API_KEY)
             
-            if config.PINECONE_INDEX_NAME in self.pc.list_indexes().names():
-                self.index = self.pc.Index(config.PINECONE_INDEX_NAME)
-                print(f"Connected to Pinecone index: {config.PINECONE_INDEX_NAME}")
+            if PINECONE_INDEX_NAME in self.pc.list_indexes().names():
+                self.index = self.pc.Index(PINECONE_INDEX_NAME)
+                print(f"Connected to Pinecone index: {PINECONE_INDEX_NAME}")
             else:
-                raise ValueError(f"Index '{config.PINECONE_INDEX_NAME}' does not exist.")
+                raise ValueError(f"Index '{PINECONE_INDEX_NAME}' does not exist.")
         else:
-            raise NotImplementedError(f"Vector database '{config.VECTOR_DB_NAME}' is not supported yet.")
+            raise NotImplementedError(f"Vector database '{VECTOR_DB_NAME}' is not supported yet.")
         
         # Initialize Reranker client if enabled
-        if config.USE_RERANKER:
-            if config.RERANKER_PROVIDER.lower() == "cohere":
-                self.reranker_client = cohere.Client(api_key=config.COHERE_API_KEY)
-                print(f"Cohere reranker initialized with model: {config.RERANKER_MODEL}")
+        if USE_RERANKER:
+            if RERANKER_PROVIDER.lower() == "cohere":
+                self.reranker_client = cohere.Client(api_key=COHERE_API_KEY)
+                print(f"Cohere reranker initialized with model: {RERANKER_MODEL}")
             else:
-                raise NotImplementedError(f"Reranker provider '{config.RERANKER_PROVIDER}' is not supported yet.")
+                raise NotImplementedError(f"Reranker provider '{RERANKER_PROVIDER}' is not supported yet.")
         
         # Initialize LLM client
-        if config.LLM_PROVIDER.lower() == "openai":
-            self.llm_client = OpenAI(api_key=config.OPENAI_API_KEY)
+        if LLM_PROVIDER.lower() == "openai":
+            self.llm_client = OpenAI(api_key=OPENAI_API_KEY)
             print(f"OpenAI client initialized")
         else:
-            raise NotImplementedError(f"LLM provider '{config.LLM_PROVIDER}' is not supported yet.")
+            raise NotImplementedError(f"LLM provider '{LLM_PROVIDER}' is not supported yet.")
         
         # Load embedding model
-        print(f"Loading embedding model: {config.EMBEDDING_MODEL}...")
-        self.tokenizer = AutoTokenizer.from_pretrained(config.EMBEDDING_MODEL)
-        self.model = AutoModel.from_pretrained(config.EMBEDDING_MODEL)
+        print(f"Loading embedding model: {EMBEDDING_MODEL}...")
+        self.tokenizer = AutoTokenizer.from_pretrained(EMBEDDING_MODEL)
+        self.model = AutoModel.from_pretrained(EMBEDDING_MODEL)
         print("Embedding model loaded")
     
     def setup_langchain(self):
@@ -65,19 +65,19 @@ class NEUChatbot:
         # Create prompt template from config
         self.prompt_template = PromptTemplate(
             input_variables=["context", "question"],
-            template=config.NEU_PROMPT_TEMPLATE
+            template=NEU_PROMPT_TEMPLATE
         )
         
         # Set up Chat model based on config
-        if config.LLM_PROVIDER.lower() == "openai":
+        if LLM_PROVIDER.lower() == "openai":
             self.chat_model = ChatOpenAI(
-                openai_api_key=config.OPENAI_API_KEY,
-                model=config.LLM_MODEL,
-                temperature=config.LLM_TEMPERATURE, 
-                max_tokens=config.LLM_MAX_TOKENS
+                openai_api_key=OPENAI_API_KEY,
+                model=LLM_MODEL,
+                temperature=LLM_TEMPERATURE, 
+                max_tokens=LLM_MAX_TOKENS
             )
         else:
-            raise NotImplementedError(f"LLM provider '{config.LLM_PROVIDER}' is not supported yet.")
+            raise NotImplementedError(f"LLM provider '{LLM_PROVIDER}' is not supported yet.")
         
         # Create LLM chain
         self.llm_chain = LLMChain(
@@ -112,9 +112,9 @@ class NEUChatbot:
     def query_vector_db(self, query_vector, top_k=None):
         """Query vector database for relevant documents based on config"""
         if top_k is None:
-            top_k = config.TOP_K_RETRIEVE
+            top_k = TOP_K_RETRIEVE
             
-        if config.VECTOR_DB_NAME.lower() == "pinecone":
+        if VECTOR_DB_NAME.lower() == "pinecone":
             response = self.index.query(vector=query_vector, top_k=top_k, include_metadata=True)
             
             documents = []
@@ -133,28 +133,28 @@ class NEUChatbot:
             
             return documents
         else:
-            raise NotImplementedError(f"Vector database '{config.VECTOR_DB_NAME}' is not supported yet.")
+            raise NotImplementedError(f"Vector database '{VECTOR_DB_NAME}' is not supported yet.")
     
     def rerank_documents(self, query, documents, top_k=None):
         """Rerank documents using the configured reranker if enabled"""
-        if not config.USE_RERANKER:
-            print("Reranking is disabled in config. Returning original documents.")
-            return documents[:config.TOP_K_RERANK] if top_k is None else documents[:top_k]
+        if not USE_RERANKER:
+            print("Reranking is disabled in  Returning original documents.")
+            return documents[:TOP_K_RERANK] if top_k is None else documents[:top_k]
             
         if not documents:
             print("No documents to rerank.")
             return []
             
         if top_k is None:
-            top_k = config.TOP_K_RERANK
+            top_k = TOP_K_RERANK
         
-        if config.RERANKER_PROVIDER.lower() == "cohere":
+        if RERANKER_PROVIDER.lower() == "cohere":
             # Extract text from document objects
             docs_for_reranking = [doc['text'] for doc in documents]
             
             # Rerank using Cohere
             rerank_response = self.reranker_client.rerank(
-                model=config.RERANKER_MODEL,
+                model=RERANKER_MODEL,
                 query=query,
                 documents=docs_for_reranking,
                 top_n=top_k
@@ -167,7 +167,7 @@ class NEUChatbot:
             
             return reordered_docs
         else:
-            raise NotImplementedError(f"Reranker provider '{config.RERANKER_PROVIDER}' is not supported yet.")
+            raise NotImplementedError(f"Reranker provider '{RERANKER_PROVIDER}' is not supported yet.")
     
     def generate_answer(self, context_docs, question):
         """Generate an answer using LangChain with the configured LLM"""
@@ -182,10 +182,10 @@ class NEUChatbot:
     def process_query(self, query, top_k_retrieve=None, top_k_rerank=None):
         """Process a query and generate a response using the configured pipeline"""
         if top_k_retrieve is None:
-            top_k_retrieve = config.TOP_K_RETRIEVE
+            top_k_retrieve = TOP_K_RETRIEVE
             
         if top_k_rerank is None:
-            top_k_rerank = config.TOP_K_RERANK
+            top_k_rerank = TOP_K_RERANK
             
         # Step 1: Generate embeddings
         print("Generating embeddings...")
@@ -199,7 +199,7 @@ class NEUChatbot:
             return "I couldn't find any relevant information about that. Please try a different question or contact Northeastern University directly."
         
         # Step 3: Rerank documents if enabled
-        if config.USE_RERANKER:
+        if USE_RERANKER:
             print("Reranking documents...")
             context_docs = self.rerank_documents(query, retrieved_docs, top_k=top_k_rerank)
         else:
