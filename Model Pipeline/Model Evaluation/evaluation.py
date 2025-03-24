@@ -8,7 +8,10 @@ from tqdm import tqdm
 # Initialize OpenAI client
 api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
+<<<<<<< HEAD
 
+=======
+>>>>>>> cee2d1a0c55928e98766d68993702e41edc7baed
 
 def create_evaluation_prompt(question, ground_truth, answer):
     """Create a structured evaluation prompt."""
@@ -136,7 +139,7 @@ def process_excel_file(file_path, client, batch_size=10):
                     pbar.update(1)
         
         # Save final results
-        output_file = "evaluation_results_final.xlsx"
+        output_file = "Model Pipeline/Model Evaluation/evaluation_results_final.xlsx"
         df.to_excel(output_file, index=False)
         print(f"Evaluation complete. Results saved to {output_file}")
         
@@ -148,7 +151,7 @@ def process_excel_file(file_path, client, batch_size=10):
 
 def main():
     # Input file path
-    input_file = "question.xlsx"
+    input_file = "Model Pipeline/Model Evaluation/question.xlsx"
     
     # Check if API key is available
     if not api_key:
