@@ -1,15 +1,12 @@
 import pandas as pd
 import os
 from openai import OpenAI
-from dotenv import load_dotenv
 import time
 from tqdm import tqdm
 
-# Load environment variables (API key)
-load_dotenv()
 
 # Initialize OpenAI client
-os.environ["OPENAI_API_KEY"] = api_key
+api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=api_key)
 
 def create_evaluation_prompt(question, ground_truth, answer):
