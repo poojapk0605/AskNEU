@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Validation and Bias Check Pipeline"]
     types:
-      - completed
+    - completed
 
 jobs:
   deploy_to_cloud_run:
