@@ -1,5 +1,0 @@
-langchain
-langchain-openai
-langchain-pinecone
-pinecone-client
-openai

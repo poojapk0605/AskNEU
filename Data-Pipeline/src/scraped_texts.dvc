@@ -1,6 +1,0 @@
-outs:
-- md5: 355b7e6bd698fe98488ea711e382f0cf.dir
-  size: 20472
-  nfiles: 9
-  hash: md5
-  path: scraped_texts
