@@ -1,0 +1,274 @@
+[2025-03-02T09:37:08.466+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-02T09:37:08.491+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: scraping_pipeline_gcs.extract_data manual__2025-03-02T09:36:47.226695+00:00 [queued]>
+[2025-03-02T09:37:08.498+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: scraping_pipeline_gcs.extract_data manual__2025-03-02T09:36:47.226695+00:00 [queued]>
+[2025-03-02T09:37:08.498+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 3
+[2025-03-02T09:37:08.509+0000] {taskinstance.py:2890} INFO - Executing <Task(BashOperator): extract_data> on 2025-03-02 09:36:47.226695+00:00
+[2025-03-02T09:37:08.521+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=1282) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-02T09:37:08.523+0000] {standard_task_runner.py:72} INFO - Started process 1284 to run task
+[2025-03-02T09:37:08.524+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'scraping_pipeline_gcs', 'extract_data', 'manual__2025-03-02T09:36:47.226695+00:00', '--job-id', '78', '--raw', '--subdir', 'DAGS_FOLDER/dag.py', '--cfg-path', '/tmp/tmp477vv7ui']
+[2025-03-02T09:37:08.525+0000] {standard_task_runner.py:105} INFO - Job 78: Subtask extract_data
+[2025-03-02T09:37:08.567+0000] {task_command.py:467} INFO - Running <TaskInstance: scraping_pipeline_gcs.extract_data manual__2025-03-02T09:36:47.226695+00:00 [running]> on host 8b8ee4ab00d2
+[2025-03-02T09:37:09.426+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='scraping_pipeline_gcs' AIRFLOW_CTX_TASK_ID='extract_data' AIRFLOW_CTX_EXECUTION_DATE='2025-03-02T09:36:47.226695+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-02T09:36:47.226695+00:00'
+[2025-03-02T09:37:09.427+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-02T09:37:09.427+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-02T09:37:09.427+0000] {logging_mixin.py:190} INFO - Current task name:extract_data state:running start_date:2025-03-02 09:37:08.492321+00:00
+[2025-03-02T09:37:09.427+0000] {logging_mixin.py:190} INFO - Dag name:scraping_pipeline_gcs and current dag run status:running
+[2025-03-02T09:37:09.428+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-02T09:37:09.428+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-03-02T09:37:09.429+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'python /opt/***/dags/src/Scrape_script.py && true']
+[2025-03-02T09:37:09.455+0000] {subprocess.py:99} INFO - Output:
+[2025-03-02T09:37:11.732+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://www.recreation.northeastern.edu/ (fail_count=0)
+[2025-03-02T09:37:25.058+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://www.recreation.northeastern.edu/
+[2025-03-02T09:37:25.553+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/guests/ (fail_count=0)
+[2025-03-02T09:37:35.838+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/guests/
+[2025-03-02T09:37:36.813+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/instructional-recreation-faqs/ (fail_count=0)
+[2025-03-02T09:37:46.188+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/instructional-recreation-faqs/
+[2025-03-02T09:37:46.889+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/program-registration/ (fail_count=0)
+[2025-03-02T09:37:54.687+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/program-registration/
+[2025-03-02T09:37:55.343+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/students/ (fail_count=0)
+[2025-03-02T09:38:01.477+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/students/
+[2025-03-02T09:38:02.034+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/class-descriptions-2/ (fail_count=0)
+[2025-03-02T09:38:09.040+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/class-descriptions-2/
+[2025-03-02T09:38:09.712+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/membership (fail_count=0)
+[2025-03-02T09:38:19.250+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/membership
+[2025-03-02T09:38:19.840+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/marino-recreation-center/ (fail_count=0)
+[2025-03-02T09:38:29.688+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/marino-recreation-center/
+[2025-03-02T09:38:30.747+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/appropriate-attire-and-equipment-guidelinesolicy/ (fail_count=0)
+[2025-03-02T09:38:38.374+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/appropriate-attire-and-equipment-guidelinesolicy/
+[2025-03-02T09:38:38.852+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/staff/ (fail_count=0)
+[2025-03-02T09:38:44.953+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/staff/
+[2025-03-02T09:38:45.607+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/im-handbook-and-sport-rules/ (fail_count=0)
+[2025-03-02T09:38:52.186+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/im-handbook-and-sport-rules/
+[2025-03-02T09:38:52.681+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/class-descriptions/ (fail_count=0)
+[2025-03-02T09:39:01.018+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/class-descriptions/
+[2025-03-02T09:39:01.901+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/global-recreation-fitness-app/ (fail_count=0)
+[2025-03-02T09:39:07.671+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/global-recreation-fitness-app/
+[2025-03-02T09:39:08.395+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/global-recreation-vancouver-campus/ (fail_count=0)
+[2025-03-02T09:39:14.986+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/global-recreation-vancouver-campus/
+[2025-03-02T09:39:15.509+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/part-time-non-benefits-eligible-employees-and-visiting-scholars/ (fail_count=0)
+[2025-03-02T09:39:22.683+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/part-time-non-benefits-eligible-employees-and-visiting-scholars/
+[2025-03-02T09:39:23.161+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/global-recreation-ambassadors/ (fail_count=0)
+[2025-03-02T09:39:28.812+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/global-recreation-ambassadors/
+[2025-03-02T09:39:29.480+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/carter-playground/ (fail_count=0)
+[2025-03-02T09:39:36.936+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/carter-playground/
+[2025-03-02T09:39:37.295+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/facilities-hours/ (fail_count=0)
+[2025-03-02T09:39:44.452+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/facilities-hours/
+[2025-03-02T09:39:44.942+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2020/09/carter-playground.jpg (fail_count=0)
+[2025-03-02T09:39:51.872+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2020/09/carter-playground.jpg
+[2025-03-02T09:39:52.354+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/free-agents/ (fail_count=0)
+[2025-03-02T09:40:02.124+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/free-agents/
+[2025-03-02T09:40:03.100+0000] {subprocess.py:106} INFO - [SUCCESS] Downloaded: https://recreation.northeastern.edu/files/2020/09/FreeAgentHandoutWeb.pdf
+[2025-03-02T09:40:03.107+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/jobs/ (fail_count=0)
+[2025-03-02T09:40:10.271+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/jobs/
+[2025-03-02T09:40:10.672+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/e-sports-leagues/ (fail_count=0)
+[2025-03-02T09:40:21.231+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/e-sports-leagues/
+[2025-03-02T09:40:21.667+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/personal-training-fees/ (fail_count=0)
+[2025-03-02T09:40:29.263+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/personal-training-fees/
+[2025-03-02T09:40:30.022+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/classes-offered-registration/ (fail_count=0)
+[2025-03-02T09:40:35.509+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/classes-offered-registration/
+[2025-03-02T09:40:35.955+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/global-recreation/ (fail_count=0)
+[2025-03-02T09:40:51.772+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/global-recreation/
+[2025-03-02T09:40:52.267+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/group-fitness/ (fail_count=0)
+[2025-03-02T09:41:01.666+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/group-fitness/
+[2025-03-02T09:41:02.221+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/ (fail_count=0)
+[2025-03-02T09:41:14.972+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/
+[2025-03-02T09:41:16.106+0000] {subprocess.py:106} INFO - [SUCCESS] Downloaded: https://recreation.northeastern.edu/files/2024/12/SquashBusters-Spring-2025.pdf
+[2025-03-02T09:41:16.109+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/club-sports/ (fail_count=0)
+[2025-03-02T09:41:21.641+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/club-sports/
+[2025-03-02T09:41:22.091+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/current-intramural-sports/ (fail_count=0)
+[2025-03-02T09:41:31.300+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/current-intramural-sports/
+[2025-03-02T09:41:31.691+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/who-can-play-intramural-sports/ (fail_count=0)
+[2025-03-02T09:41:39.928+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/who-can-play-intramural-sports/
+[2025-03-02T09:41:40.302+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/how-to-register/ (fail_count=0)
+[2025-03-02T09:41:45.653+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/how-to-register/
+[2025-03-02T09:41:46.327+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/intramural-sports-faqs/ (fail_count=0)
+[2025-03-02T09:41:55.519+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/intramural-sports-faqs/
+[2025-03-02T09:41:56.100+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/merchandise-shop/ (fail_count=0)
+[2025-03-02T09:42:07.002+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/merchandise-shop/
+[2025-03-02T09:42:08.046+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/road-races-triathlons/ (fail_count=0)
+[2025-03-02T09:42:18.650+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/road-races-triathlons/
+[2025-03-02T09:42:19.210+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/instructional-recreation-policies/ (fail_count=0)
+[2025-03-02T09:42:28.276+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/instructional-recreation-policies/
+[2025-03-02T09:42:28.906+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/student-employee-of-the-month/ (fail_count=0)
+[2025-03-02T09:42:40.129+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/student-employee-of-the-month/
+[2025-03-02T09:42:40.813+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2020/09/Roya-Baalbaki.png (fail_count=0)
+[2025-03-02T09:42:49.497+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2020/09/Roya-Baalbaki.png
+[2025-03-02T09:42:50.121+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2020/09/Michael-Quinn.png (fail_count=0)
+[2025-03-02T09:42:56.827+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2020/09/Michael-Quinn.png
+[2025-03-02T09:42:57.404+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2024/11/Shub.png (fail_count=0)
+[2025-03-02T09:43:05.309+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2024/11/Shub.png
+[2025-03-02T09:43:05.987+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2020/09/Jonah-Albrecht.png (fail_count=0)
+[2025-03-02T09:43:12.600+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2020/09/Jonah-Albrecht.png
+[2025-03-02T09:43:13.231+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2025/01/2.png (fail_count=0)
+[2025-03-02T09:43:22.128+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2025/01/2.png
+[2025-03-02T09:43:22.997+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2023/03/Dennis-Simmons.png (fail_count=0)
+[2025-03-02T09:43:30.902+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2023/03/Dennis-Simmons.png
+[2025-03-02T09:43:31.500+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2024/05/Melanie.png (fail_count=0)
+[2025-03-02T09:43:40.549+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2024/05/Melanie.png
+[2025-03-02T09:43:41.187+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/files/2023/08/Michael-Davis.png (fail_count=0)
+[2025-03-02T09:43:45.795+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/files/2023/08/Michael-Davis.png
+[2025-03-02T09:43:46.353+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/membership/ (fail_count=0)
+[2025-03-02T09:43:57.534+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/membership/
+[2025-03-02T09:43:59.236+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/equipment-rentals/ (fail_count=0)
+[2025-03-02T09:44:05.373+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/equipment-rentals/
+[2025-03-02T09:44:05.776+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/policies/ (fail_count=0)
+[2025-03-02T09:44:13.022+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/policies/
+[2025-03-02T09:44:13.872+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/guest/ (fail_count=0)
+[2025-03-02T09:44:25.357+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/guest/
+[2025-03-02T09:44:26.580+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/general-information/ (fail_count=0)
+[2025-03-02T09:44:33.032+0000] {subprocess.py:106} INFO - [SUCCESS] Scraped: https://recreation.northeastern.edu/general-information/
+[2025-03-02T09:44:35.372+0000] {subprocess.py:106} INFO - [INFO] Visiting: https://recreation.northeastern.edu/intramural-sports/ (fail_count=0)
+[2025-03-02T09:44:37.168+0000] {local_task_job_runner.py:346} WARNING - State of this instance has been externally set to failed. Terminating instance.
+[2025-03-02T09:44:37.179+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2025-03-02T09:44:37.186+0000] {process_utils.py:132} INFO - Sending 15 to group 1284. PIDs of all processes in the group: [1286, 1287, 1284]
+[2025-03-02T09:44:37.188+0000] {process_utils.py:87} INFO - Sending the signal 15 to group 1284
+[2025-03-02T09:44:37.191+0000] {taskinstance.py:3094} ERROR - Received SIGTERM. Terminating subprocesses.
+[2025-03-02T09:44:37.290+0000] {taskinstance.py:3095} ERROR - Stacktrace: 
+  File "/home/***/.local/bin/***", line 8, in <module>
+    sys.exit(main())
+  File "/home/***/.local/lib/python3.12/site-packages/***/__main__.py", line 62, in main
+    args.func(args)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/providers/celery/cli/celery_command.py", line 64, in wrapper
+    providers_configuration_loaded(func)(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/providers_configuration_loader.py", line 55, in wrapped_function
+    return func(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/providers/celery/cli/celery_command.py", line 237, in worker
+    _run_command_with_daemon_option(
+  File "/home/***/.local/lib/python3.12/site-packages/***/providers/celery/cli/celery_command.py", line 50, in _run_command_with_daemon_option
+    run_command_with_daemon_option(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/daemon_utils.py", line 86, in run_command_with_daemon_option
+    callback()
+  File "/home/***/.local/lib/python3.12/site-packages/***/providers/celery/cli/celery_command.py", line 230, in run_celery_worker
+    celery_app.worker_main(options)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/app/base.py", line 391, in worker_main
+    self.start(argv=argv)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/app/base.py", line 371, in start
+    celery.main(args=argv, standalone_mode=False)
+  File "/home/***/.local/lib/python3.12/site-packages/click/core.py", line 1082, in main
+    rv = self.invoke(ctx)
+  File "/home/***/.local/lib/python3.12/site-packages/click/core.py", line 1697, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/home/***/.local/lib/python3.12/site-packages/click/core.py", line 1443, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/***/.local/lib/python3.12/site-packages/click/core.py", line 788, in invoke
+    return __callback(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/click/decorators.py", line 33, in new_func
+    return f(get_current_context(), *args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/bin/base.py", line 135, in caller
+    return f(ctx, *args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/bin/worker.py", line 356, in worker
+    worker.start()
+  File "/home/***/.local/lib/python3.12/site-packages/celery/worker/worker.py", line 202, in start
+    self.blueprint.start(self)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/bootsteps.py", line 116, in start
+    step.start(parent)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/bootsteps.py", line 365, in start
+    return self.obj.start()
+  File "/home/***/.local/lib/python3.12/site-packages/celery/concurrency/base.py", line 130, in start
+    self.on_start()
+  File "/home/***/.local/lib/python3.12/site-packages/celery/concurrency/prefork.py", line 109, in on_start
+    P = self._pool = Pool(processes=self.limit,
+  File "/home/***/.local/lib/python3.12/site-packages/celery/concurrency/asynpool.py", line 464, in __init__
+    super().__init__(processes, *args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/pool.py", line 1046, in __init__
+    self._create_worker_process(i)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/concurrency/asynpool.py", line 482, in _create_worker_process
+    return super()._create_worker_process(i)
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/pool.py", line 1158, in _create_worker_process
+    w.start()
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/process.py", line 120, in start
+    self._popen = self._Popen(self)
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/context.py", line 331, in _Popen
+    return Popen(process_obj)
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/popen_fork.py", line 22, in __init__
+    self._launch(process_obj)
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/popen_fork.py", line 77, in _launch
+    code = process_obj._bootstrap()
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/process.py", line 323, in _bootstrap
+    self.run()
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/process.py", line 110, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/pool.py", line 292, in __call__
+    sys.exit(self.workloop(pid=pid))
+  File "/home/***/.local/lib/python3.12/site-packages/billiard/pool.py", line 362, in workloop
+    result = (True, prepare_result(fun(*args, **kwargs)))
+  File "/home/***/.local/lib/python3.12/site-packages/celery/app/trace.py", line 651, in fast_trace_task
+    R, I, T, Rstr = tasks[task].__trace__(
+  File "/home/***/.local/lib/python3.12/site-packages/celery/app/trace.py", line 453, in trace_task
+    R = retval = fun(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/celery/app/trace.py", line 736, in __protected_call__
+    return self.run(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/providers/celery/executors/celery_executor_utils.py", line 139, in execute_command
+    _execute_in_fork(command_to_exec, celery_task_id)
+  File "/home/***/.local/lib/python3.12/site-packages/***/providers/celery/executors/celery_executor_utils.py", line 171, in _execute_in_fork
+    args.func(args)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/task_command.py", line 254, in _run_task_by_selected_method
+    return _run_task_by_local_task_job(args, ti)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/task_command.py", line 322, in _run_task_by_local_task_job
+    ret = run_job(job=job_runner.job, execute_callable=job_runner._execute)
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/jobs/job.py", line 421, in run_job
+    return execute_job(job, execute_callable=execute_callable)
+  File "/home/***/.local/lib/python3.12/site-packages/***/jobs/job.py", line 450, in execute_job
+    ret = execute_callable()
+  File "/home/***/.local/lib/python3.12/site-packages/***/jobs/local_task_job_runner.py", line 171, in _execute
+    self.task_runner.start()
+  File "/home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py", line 55, in start
+    self.process = self._start_by_fork()
+  File "/home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+  File "/home/***/.local/lib/python3.12/site-packages/***/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 3006, in _run_raw_task
+    return _run_raw_task(
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 274, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 3161, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 3185, in _execute_task
+    return _execute_task(self, context, task_orig)
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 768, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+  File "/home/***/.local/lib/python3.12/site-packages/***/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/***/.local/lib/python3.12/site-packages/***/operators/bash.py", line 257, in execute
+    result = self._run_inline_command(bash_path=bash_path, env=env)
+  File "/home/***/.local/lib/python3.12/site-packages/***/operators/bash.py", line 284, in _run_inline_command
+    return self.subprocess_hook.run_command(
+  File "/home/***/.local/lib/python3.12/site-packages/***/hooks/subprocess.py", line 104, in run_command
+    for raw_line in iter(self.sub_process.stdout.readline, b""):
+  File "/home/***/.local/lib/python3.12/site-packages/***/models/taskinstance.py", line 3095, in signal_handler
+    self.log.error("Stacktrace: \n%s", "".join(traceback.format_stack()))
+
+[2025-03-02T09:44:37.305+0000] {subprocess.py:117} INFO - Sending SIGTERM signal to process group
+[2025-03-02T09:44:37.671+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-02T09:44:37.884+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=1286, status='terminated', started='09:37:08') (1286) terminated with exit code None
+[2025-03-02T09:44:37.899+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=1287, status='terminated', started='09:37:08') (1287) terminated with exit code None
+[2025-03-02T09:44:37.903+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=1284, status='terminated', exitcode=0, started='09:37:07') (1284) terminated with exit code 0

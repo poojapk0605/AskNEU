@@ -1,0 +1,40 @@
+[2025-03-02T23:56:03.028+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-02T23:56:03.045+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: scraping_pipeline_gcs.run_unittests manual__2025-03-02T23:55:51.463780+00:00 [queued]>
+[2025-03-02T23:56:03.050+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: scraping_pipeline_gcs.run_unittests manual__2025-03-02T23:55:51.463780+00:00 [queued]>
+[2025-03-02T23:56:03.050+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 3
+[2025-03-02T23:56:03.058+0000] {taskinstance.py:2890} INFO - Executing <Task(BashOperator): run_unittests> on 2025-03-02 23:55:51.463780+00:00
+[2025-03-02T23:56:03.076+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=168) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-02T23:56:03.081+0000] {standard_task_runner.py:72} INFO - Started process 170 to run task
+[2025-03-02T23:56:03.076+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'scraping_pipeline_gcs', 'run_unittests', 'manual__2025-03-02T23:55:51.463780+00:00', '--job-id', '230', '--raw', '--subdir', 'DAGS_FOLDER/dag.py', '--cfg-path', '/tmp/tmpoy3ku_jf']
+[2025-03-02T23:56:03.087+0000] {standard_task_runner.py:105} INFO - Job 230: Subtask run_unittests
+[2025-03-02T23:56:03.130+0000] {task_command.py:467} INFO - Running <TaskInstance: scraping_pipeline_gcs.run_unittests manual__2025-03-02T23:55:51.463780+00:00 [running]> on host 5e87a20f9330
+[2025-03-02T23:56:03.182+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='scraping_pipeline_gcs' AIRFLOW_CTX_TASK_ID='run_unittests' AIRFLOW_CTX_EXECUTION_DATE='2025-03-02T23:55:51.463780+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-02T23:55:51.463780+00:00'
+[2025-03-02T23:56:03.183+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-02T23:56:03.183+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-02T23:56:03.183+0000] {logging_mixin.py:190} INFO - Current task name:run_unittests state:running start_date:2025-03-02 23:56:03.045396+00:00
+[2025-03-02T23:56:03.183+0000] {logging_mixin.py:190} INFO - Dag name:scraping_pipeline_gcs and current dag run status:running
+[2025-03-02T23:56:03.184+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-02T23:56:03.184+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-03-02T23:56:03.185+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', 'pytest /opt/***/dags/src/test_scraper.py']
+[2025-03-02T23:56:03.195+0000] {subprocess.py:99} INFO - Output:
+[2025-03-02T23:56:04.570+0000] {subprocess.py:106} INFO - ============================= test session starts ==============================
+[2025-03-02T23:56:04.579+0000] {subprocess.py:106} INFO - platform linux -- Python 3.12.9, pytest-8.3.5, pluggy-1.5.0
+[2025-03-02T23:56:04.579+0000] {subprocess.py:106} INFO - rootdir: /opt/***/dags/src
+[2025-03-02T23:56:04.582+0000] {subprocess.py:106} INFO - plugins: time-machine-2.16.0, anyio-4.8.0, hydra-core-1.3.2
+[2025-03-02T23:56:04.583+0000] {subprocess.py:106} INFO - collected 7 items
+[2025-03-02T23:56:04.584+0000] {subprocess.py:106} INFO - 
+[2025-03-02T23:56:04.591+0000] {subprocess.py:106} INFO - ../../opt/***/dags/src/test_scraper.py .......                       [100%]
+[2025-03-02T23:56:04.592+0000] {subprocess.py:106} INFO - 
+[2025-03-02T23:56:04.593+0000] {subprocess.py:106} INFO - ============================== 7 passed in 0.55s ===============================
+[2025-03-02T23:56:04.657+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-03-02T23:56:04.708+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-02T23:56:04.708+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=scraping_pipeline_gcs, task_id=run_unittests, run_id=manual__2025-03-02T23:55:51.463780+00:00, execution_date=20250302T235551, start_date=20250302T235603, end_date=20250302T235604
+[2025-03-02T23:56:04.726+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-03-02T23:56:04.726+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-03-02T23:56:04.726+0000] {logging_mixin.py:190} INFO - Dag name:scraping_pipeline_gcs queued_at:2025-03-02 23:55:51.507271+00:00
+[2025-03-02T23:56:04.726+0000] {logging_mixin.py:190} INFO - Task hostname:5e87a20f9330 operator:BashOperator
+[2025-03-02T23:56:04.760+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-03-02T23:56:04.804+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-03-02T23:56:04.805+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

@@ -1,0 +1,25 @@
+[2025-04-13T00:30:03.544+0000] {processor.py:186} INFO - Started process (PID=10109) to work on /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:30:03.545+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/Scrape_script.py for tasks to queue
+[2025-04-13T00:30:03.546+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:30:03.546+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:30:03.753+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:30:03.765+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/Scrape_script.py took 0.226 seconds
+[2025-04-13T00:30:34.314+0000] {processor.py:186} INFO - Started process (PID=10178) to work on /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:30:34.315+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/Scrape_script.py for tasks to queue
+[2025-04-13T00:30:34.316+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:30:34.316+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:30:34.503+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:30:34.514+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/Scrape_script.py took 0.205 seconds
+[2025-04-13T00:31:04.672+0000] {processor.py:186} INFO - Started process (PID=10248) to work on /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:31:04.673+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/Scrape_script.py for tasks to queue
+[2025-04-13T00:31:04.674+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:31:04.674+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:31:04.861+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:31:04.873+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/Scrape_script.py took 0.206 seconds
+[2025-04-13T00:31:35.316+0000] {processor.py:186} INFO - Started process (PID=10317) to work on /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:31:35.316+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/Scrape_script.py for tasks to queue
+[2025-04-13T00:31:35.318+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:31:35.317+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:31:35.519+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:31:35.531+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/Scrape_script.py took 0.221 seconds
+[2025-04-13T00:32:05.792+0000] {processor.py:186} INFO - Started process (PID=10380) to work on /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:32:05.793+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/Scrape_script.py for tasks to queue
+[2025-04-13T00:32:05.794+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:32:05.794+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:32:05.981+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/Scrape_script.py
+[2025-04-13T00:32:05.993+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/Scrape_script.py took 0.205 seconds

@@ -1,0 +1,8 @@
+# Web scraping
+selenium
+webdriver-manager
+beautifulsoup4==4.12.2
+requests==2.31.0
+pandas==2.0.3
+colorama==0.4.6
+urllib3==2.0.4

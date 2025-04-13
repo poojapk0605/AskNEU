@@ -1,0 +1,25 @@
+[2025-04-13T00:30:03.486+0000] {processor.py:186} INFO - Started process (PID=10108) to work on /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:30:03.486+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/links_generator/urls.xlsx for tasks to queue
+[2025-04-13T00:30:03.488+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:30:03.487+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:30:03.498+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:30:03.510+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/links_generator/urls.xlsx took 0.028 seconds
+[2025-04-13T00:30:34.242+0000] {processor.py:186} INFO - Started process (PID=10177) to work on /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:30:34.243+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/links_generator/urls.xlsx for tasks to queue
+[2025-04-13T00:30:34.245+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:30:34.244+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:30:34.255+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:30:34.266+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/links_generator/urls.xlsx took 0.029 seconds
+[2025-04-13T00:31:04.415+0000] {processor.py:186} INFO - Started process (PID=10246) to work on /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:31:04.416+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/links_generator/urls.xlsx for tasks to queue
+[2025-04-13T00:31:04.417+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:31:04.417+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:31:04.428+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:31:04.442+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/links_generator/urls.xlsx took 0.032 seconds
+[2025-04-13T00:31:34.788+0000] {processor.py:186} INFO - Started process (PID=10310) to work on /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:31:34.790+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/links_generator/urls.xlsx for tasks to queue
+[2025-04-13T00:31:34.791+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:31:34.791+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:31:34.802+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:31:34.815+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/links_generator/urls.xlsx took 0.033 seconds
+[2025-04-13T00:32:04.931+0000] {processor.py:186} INFO - Started process (PID=10364) to work on /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:32:04.932+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/links_generator/urls.xlsx for tasks to queue
+[2025-04-13T00:32:04.933+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:32:04.932+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:32:04.943+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/links_generator/urls.xlsx
+[2025-04-13T00:32:04.955+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/links_generator/urls.xlsx took 0.029 seconds

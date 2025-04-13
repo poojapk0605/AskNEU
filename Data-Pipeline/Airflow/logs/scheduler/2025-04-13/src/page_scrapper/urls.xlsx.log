@@ -1,0 +1,25 @@
+[2025-04-13T00:30:03.472+0000] {processor.py:186} INFO - Started process (PID=10107) to work on /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:30:03.473+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/urls.xlsx for tasks to queue
+[2025-04-13T00:30:03.474+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:30:03.474+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:30:03.484+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:30:03.497+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/urls.xlsx took 0.029 seconds
+[2025-04-13T00:30:34.227+0000] {processor.py:186} INFO - Started process (PID=10176) to work on /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:30:34.227+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/urls.xlsx for tasks to queue
+[2025-04-13T00:30:34.229+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:30:34.229+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:30:34.240+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:30:34.253+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/urls.xlsx took 0.031 seconds
+[2025-04-13T00:31:04.324+0000] {processor.py:186} INFO - Started process (PID=10245) to work on /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:31:04.325+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/urls.xlsx for tasks to queue
+[2025-04-13T00:31:04.326+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:31:04.326+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:31:04.337+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:31:04.351+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/urls.xlsx took 0.032 seconds
+[2025-04-13T00:31:34.772+0000] {processor.py:186} INFO - Started process (PID=10309) to work on /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:31:34.773+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/urls.xlsx for tasks to queue
+[2025-04-13T00:31:34.774+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:31:34.774+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:31:34.786+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:31:34.800+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/urls.xlsx took 0.034 seconds
+[2025-04-13T00:32:04.889+0000] {processor.py:186} INFO - Started process (PID=10363) to work on /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:32:04.890+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/src/page_scrapper/urls.xlsx for tasks to queue
+[2025-04-13T00:32:04.891+0000] {logging_mixin.py:190} INFO - [2025-04-13T00:32:04.891+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:32:04.901+0000] {processor.py:927} WARNING - No viable dags retrieved from /opt/airflow/dags/src/page_scrapper/urls.xlsx
+[2025-04-13T00:32:04.913+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/src/page_scrapper/urls.xlsx took 0.029 seconds

@@ -1,0 +1,32 @@
+[2025-03-03T00:45:10.905+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-03-03T00:45:11.012+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: scraping_pipeline_gcs.alert_failure manual__2025-03-03T00:38:11.650909+00:00 [queued]>
+[2025-03-03T00:45:11.033+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: scraping_pipeline_gcs.alert_failure manual__2025-03-03T00:38:11.650909+00:00 [queued]>
+[2025-03-03T00:45:11.034+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 3
+[2025-03-03T00:45:11.091+0000] {taskinstance.py:2890} INFO - Executing <Task(BashOperator): alert_failure> on 2025-03-03 00:38:11.650909+00:00
+[2025-03-03T00:45:11.133+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=1048) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-03-03T00:45:11.150+0000] {standard_task_runner.py:72} INFO - Started process 1058 to run task
+[2025-03-03T00:45:11.182+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'scraping_pipeline_gcs', 'alert_failure', 'manual__2025-03-03T00:38:11.650909+00:00', '--job-id', '255', '--raw', '--subdir', 'DAGS_FOLDER/dag.py', '--cfg-path', '/tmp/tmplo218fvk']
+[2025-03-03T00:45:11.187+0000] {standard_task_runner.py:105} INFO - Job 255: Subtask alert_failure
+[2025-03-03T00:45:11.492+0000] {task_command.py:467} INFO - Running <TaskInstance: scraping_pipeline_gcs.alert_failure manual__2025-03-03T00:38:11.650909+00:00 [running]> on host 5e87a20f9330
+[2025-03-03T00:45:11.970+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='scraping_pipeline_gcs' AIRFLOW_CTX_TASK_ID='alert_failure' AIRFLOW_CTX_EXECUTION_DATE='2025-03-03T00:38:11.650909+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-03-03T00:38:11.650909+00:00'
+[2025-03-03T00:45:12.017+0000] {logging_mixin.py:190} INFO - Task instance is in running state
+[2025-03-03T00:45:12.019+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: queued
+[2025-03-03T00:45:12.025+0000] {logging_mixin.py:190} INFO - Current task name:alert_failure state:running start_date:2025-03-03 00:45:11.013235+00:00
+[2025-03-03T00:45:12.031+0000] {logging_mixin.py:190} INFO - Dag name:scraping_pipeline_gcs and current dag run status:running
+[2025-03-03T00:45:12.035+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-03-03T00:45:12.054+0000] {subprocess.py:78} INFO - Tmp dir root location: /tmp
+[2025-03-03T00:45:12.065+0000] {subprocess.py:88} INFO - Running command: ['/usr/bin/bash', '-c', "echo '❌ Scraping Failed! Check Airflow logs.'"]
+[2025-03-03T00:45:12.160+0000] {subprocess.py:99} INFO - Output:
+[2025-03-03T00:45:12.208+0000] {subprocess.py:106} INFO - ❌ Scraping Failed! Check Airflow logs.
+[2025-03-03T00:45:12.209+0000] {subprocess.py:110} INFO - Command exited with return code 0
+[2025-03-03T00:45:12.389+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-03-03T00:45:12.391+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=scraping_pipeline_gcs, task_id=alert_failure, run_id=manual__2025-03-03T00:38:11.650909+00:00, execution_date=20250303T003811, start_date=20250303T004511, end_date=20250303T004512
+[2025-03-03T00:45:12.483+0000] {logging_mixin.py:190} INFO - Task instance in success state
+[2025-03-03T00:45:12.488+0000] {logging_mixin.py:190} INFO -  Previous state of the Task instance: running
+[2025-03-03T00:45:12.492+0000] {logging_mixin.py:190} INFO - Dag name:scraping_pipeline_gcs queued_at:2025-03-03 00:38:11.765374+00:00
+[2025-03-03T00:45:12.494+0000] {logging_mixin.py:190} INFO - Task hostname:5e87a20f9330 operator:BashOperator
+[2025-03-03T00:45:12.591+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-03-03T00:45:12.713+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-03-03T00:45:12.717+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
