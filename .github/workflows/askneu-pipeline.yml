@@ -35,17 +35,17 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -f Dockerfile .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }} -f Dockerfile .
 
       - name: Push Docker Image
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy ${{ env.IMAGE_NAME }} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
-            --region ${{ env.REGION }} \
+          gcloud run deploy ${{ secrets.IMAGE_NAME }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_NAME }}:${{ github.sha }} \
+            --region ${{ secrets.REGION }} \
             --platform managed \
             --allow-unauthenticated \
             --memory 2Gi \
@@ -53,11 +53,11 @@ jobs:
 
       - name: Trigger Airflow DAG
         run: |
-          curl -X POST "https://${{ env.REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID }}/services/${{ env.IMAGE_NAME }}:run" \
+          curl -X POST "https://${{ secrets.REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID }}/services/${{ secrets.IMAGE_NAME }}:run" \
           -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
           -H "Content-Type: application/json" \
           -d '{"conf": {"trigger_file": "urls.xls"}}'
 
       - name: Clean up old images
         run: |
-          gcloud container images delete gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }} --force-delete-tags --quiet || true
+          gcloud container images delete gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.IMAGE_NAME }} --force-delete-tags --quiet || true
