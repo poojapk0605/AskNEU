@@ -1,61 +1,64 @@
-name: AskNEU CI/CD Pipeline
+name: Deploy Airflow Pipeline to Cloud Run
 
 on:
-  workflow_run:
-    workflows: ["Validation and Bias Check Pipeline"]
-    types:
-      - completed
   push:
+    branches:
+      - main
     paths:
-      - 'Model Pipeline/model.py'
-      - 'Model Pipeline/config.py'
-      - 'Model Pipeline/Dockerfile'
+      - 'Data Pipeline/dags/**'
+      - 'Dockerfile'
+      - '.github/workflows/**'
 
 jobs:
-  deploy_to_cloud_run:
+  deploy-airflow:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'push' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      
-      - name: Build Docker image
-        run: |
-          docker build -f "Model Pipeline/Dockerfile" -t askneu-chatbot:${{ github.sha }} .
-      
-      - name: Push to Artifact Registry
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-        run: |
-          echo $GCP_SA_KEY > gcp-key.json
-          gcloud auth activate-service-account --key-file=gcp-key.json
-          gcloud config set project $GCP_PROJECT_ID
-          gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker tag askneu-chatbot:${{ github.sha }} us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:${{ github.sha }}
-          docker tag askneu-chatbot:${{ github.sha }} us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:latest
-          docker push us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:${{ github.sha }}
-          docker push us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:latest
-      
-      - name: Deploy to Cloud Run
-        env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          COHERE_API_KEY: ${{ secrets.COHERE_API_KEY }}
-        run: |
-          gcloud run deploy askneu-chatbot \
-            --image us-central1-docker.pkg.dev/$GCP_PROJECT_ID/askneu-repo/askneu-chatbot:${{ github.sha }} \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated \
-            --set-env-vars="PYTHONPATH=/app,PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }},OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},COHERE_API_KEY=${{ secrets.COHERE_API_KEY }}"
 
-      - name: Send email notification
-        if: always()
-        env:
-          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-          EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
-          JOB_STATUS: ${{ job.status }}
-        run: python "Model Pipeline/Model Evaluation/send_email_oauth2.py"
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      IMAGE_NAME: airflow-pipeline
+      REGION: us-central1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Google Cloud CLI
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+
+      - name: Build Docker Image
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }} -f Dockerfile .
+
+      - name: Push Docker Image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.IMAGE_NAME }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --memory 2Gi \
+            --cpu 1 \
+            --set-env-vars GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},GCP_SA_KEY='${{ secrets.GCP_SA_KEY }}',PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }},OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+
+      - name: Trigger Airflow DAG
+        run: |
+          curl -X POST "https://${{ env.REGION }}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${{ secrets.GCP_PROJECT_ID }}/services/${{ env.IMAGE_NAME }}:run" \
+          -H "Authorization: Bearer $(gcloud auth print-identity-token)" \
+          -H "Content-Type: application/json" \
+          -d '{"conf": {"trigger_file": "urls.xls"}}'
+
+      - name: Clean up old images
+        run: |
+          gcloud container images delete gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.IMAGE_NAME }} --force-delete-tags --quiet || true
