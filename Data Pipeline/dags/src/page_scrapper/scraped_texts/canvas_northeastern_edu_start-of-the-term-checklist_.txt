@@ -1,0 +1,58 @@
+URL (Source): https://canvas.northeastern.edu/start-of-the-term-checklist/
+Scraped on: 2025-04-12 23:33:45.225217
+
+
+[Start of Term Checklist]
+
+
+[A digital home for your students]
+
+Canvas offers a digital home for students who may be accessing your course from across campus or across the globe. This checklist will help you get your Canvas course ready for students.
+
+[Best Practices]
+
+
+[Import Content or Template]
+
+Canvas creates a shell for every Registrar-enrolled section that a faculty member teaches. These shells are empty until content is imported into them. Faculty can either import content from previously taught courses or start fresh using one of the Northeastern Canvas templates.
+Import content
+Canvas templates
+
+[Use Canvas homepage to welcome and orient students]
+
+A homepage for the course equips students with essential information about the course and where to get started.
+Learn More
+
+[Add a syllabus to the course]
+
+The syllabus maps out the course communication plan and course deliverables. Linking it from the Syllabus area of each course makes it easy for students to access.
+
+[Utilize Modules for course flow]
+
+The syllabus maps out the Modules provide an at-a-glance view of the activities for a given week or topic. They also create a linear flow for navigating through the week’s activities.
+
+[Link course content through Canvas]
+
+Linking all files, videos, and library materials into Canvas modules helps students find course content and obtain an at-a-glance view of materials.
+Content
+Video
+
+[Create and grade assignments through Canvas]
+
+Assignments can be turned in via Canvas native assignments, quizzes, or integrated external tools. When you add due dates in your courses, they show on student calendars, which helps keep them on track.
+Create Assignment
+Add Due Dates
+
+[Include students who cannot join in person]
+
+Instructors can use Panopto, Teams, or Zoom to respond with flexibility to the needs of students who may be absent for illness or other reasons.
+
+[Publish your course in Canvas]
+
+Publishing your courses by the start of the term helps students prepare and feel ready to learn. You can publish or unpublish entire modules or some items within modules.
+
+[Communicate with students]
+
+Canvas is the central place to communicate with students about the course outside of course meetings, including sending announcements and messages.
+Announcements
+Messages

@@ -1,0 +1,28 @@
+URL (Source): https://canvas.northeastern.edu/canvas-wrap-up-checklist/
+Scraped on: 2025-04-12 23:33:50.864951
+
+
+[Canvas Wrap-up Checklist]
+
+
+[A digital home for your students]
+
+At the end of each term, plan to review the information in your Canvas courses and ensure its accuracy, including checking that students have the appropriate level of access to the Canvas course moving forward. This checklist will help you wrap-up your Canvas course at the end of the term and ensure a smooth set up process when you next teach the course.
+
+[Essential Best Practices]
+
+Verify Your Canvas Gradebook
+The Canvas Gradebook automatically calculates final grades, but it is important to ensure the proper settings are in place for accuracy.Learn More
+Submit final grades to banner
+Grades do not transfer automatically from Canvas to Banner. Faculty manually submit grades to banner.Learn More
+Update Canvas course access
+Canvas allows you to control what students can and cannot access after your course is over. Use the course settings to put your course into read-only mode, or to prevent students from viewing course and quiz content after the set end date.Learn More
+Prepare for the next semester
+Customize your Canvas dashboard by removing old courses and favoriting new ones. Access the Canvas Readiness Checklist to prepare for next semester!Learn More.
+
+[Optional Best Practices]
+
+Clean up course content
+Remove unused or duplicate pages, files, and assignments to ensure accurate course imports in future semesters.Learn More
+Export content and/or records
+If you’d like to keep your own records outside of Canvas, use the export and download features to save grades, files, and course export packages to your computer.Learn More

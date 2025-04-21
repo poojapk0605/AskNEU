@@ -1,0 +1,50 @@
+URL (Source): https://canvas.northeastern.edu/knowledge-base/
+Scraped on: 2025-04-12 23:33:49.018621
+
+
+[Knowledge Base]
+
+
+[Guides and tips for using Canvas]
+
+Search and explore the Tech Knowledge Base to find guides and tips for using Canvas. To access theTech Knowledge Baseselect one of the categories listed below.
+
+[Getting Started]
+
+Review these articles to learn how to get started with Canvas.
+
+[Assessments and Assignments]
+
+Learn more about using quizzes, assignments, integrated tools and more in Canvas.
+
+[Content Creation and Organization]
+
+Learn more about using pages, modules and integrated tools to create content and organize your course.
+
+[Course Communication]
+
+Learn more about using announcements, messages, Qwickly Course tools and more to communicate with students.
+
+[Course Management]
+
+Learn more about tools in Canvas like course import, adding TAs, and more to help you manage your course.
+
+[Course Engagement and Collaboration]
+
+Learn more about using tools like the discussion, collaboration tool to create Office 365 or Google docs, and more in your Canvas course.
+
+[Grading and Analytics]
+
+Learn more about using the Grade book, speedgrader, new analytics features, and more in Canvas.
+
+[Canvas Studio]
+
+Learn more about using the video creation and editing tool in Canvas.
+
+[Canvas Commons]
+
+Learn more about using Canvas Commons to share and use Open Educational Resources in Canvas.
+
+[Integrated Tools]
+
+Learn more about the tools that are integrated in Canvas.

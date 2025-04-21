@@ -1,0 +1,31 @@
+# ✅ Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# ✅ Secrets and configs
+.env
+.env.*
+*.env
+*.key
+token.*
+credentials.*
+
+# ✅ Node.js
+node_modules/
+dist/
+build/
+.npm/
+.npmrc
+yarn.lock
+
+# ✅ System / IDE / Misc
+.DS_Store
+*.log
+.vscode/
+.idea/
+*.bak
+*.swp
+*.tmp

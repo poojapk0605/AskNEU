@@ -1,0 +1,6 @@
+[core]
+    no_scm = True
+    remote = gcs-store
+['remote "gcs-store"']
+    url = gs://askneu/dvc-storage
+    credentialpath = /opt/airflow/config/gcp-service-account.json
