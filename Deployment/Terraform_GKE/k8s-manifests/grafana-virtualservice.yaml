@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: grafana-vs
+  namespace: gmp-system
+spec:
+  hosts:
+  - "grafana.poojacloud24.pw"
+  gateways:
+  - istio-ingress/frontend-gateway
+  http:
+  - route:
+    - destination:
+        host: grafana.gmp-system.svc.cluster.local
+        port:
+          number: 80

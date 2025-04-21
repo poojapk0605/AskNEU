@@ -29,3 +29,29 @@ yarn.lock
 *.bak
 *.swp
 *.tmp
+
+# Local .terraform/ directory (holds provider plugins, backend cache, etc.)
+.terraform/
+
+# Terraform plan output files (often binary and sensitive)
+*.tfplan
+
+# State files - may contain sensitive data like secrets
+*.tfstate
+*.tfstate.backup
+
+# Crash log (rare, but can be large)
+crash.log
+
+# Override files you might use locally
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+values.yaml
+terraform.tfvars

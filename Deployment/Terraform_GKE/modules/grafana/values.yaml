@@ -1,0 +1,22 @@
+adminUser: admin
+adminPassword: admin123
+
+sidecar:
+  dashboards:
+    enabled: true
+    label: grafana_dashboard
+    labelValue: "1"
+    searchNamespace: ALL
+
+service:
+  type: ClusterIP
+  
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://collector.gmp-system.svc.cluster.local:19090
+      access: proxy
+      isDefault: true

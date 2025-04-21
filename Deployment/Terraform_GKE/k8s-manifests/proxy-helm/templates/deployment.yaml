@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: gcr.io/avian-scanner-456222-d1/neu-chatbot-backend:latest  # Replace with your actual image
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: MONGO_URI
+        - name: PYTHON_SERVICE_URL
+          value: "https://python-service-394356377702.us-central1.run.app/query"
+        - name: PYTHON_FEEDBACK_URL
+          value: "https://python-service-394356377702.us-central1.run.app/feedback"

@@ -1,0 +1,22 @@
+replicaCount: 1
+
+namespace: proxy
+image:
+  repository: gcr.io/YOUR_PROJECT_ID/neu-backend
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 5000
+
+env:
+  PORT: "5000"
+  PYTHON_SERVICE_URL: "https://python-service-394356377702.us-central1.run.app/query"
+  PYTHON_FEEDBACK_URL: "https://python-service-394356377702.us-central1.run.app/feedback"
+
+secrets:
+  mongoUri:
+    name: backend-secrets
+    key: MONGO_URI

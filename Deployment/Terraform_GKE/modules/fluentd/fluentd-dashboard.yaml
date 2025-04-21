@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-logs-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  cluster-logs-dashboard.json: |
+    {
+      "id": null,
+      "title": "GCP Logs and Metrics Overview",
+      "timezone": "browser",
+      "schemaVersion": 36,
+      "version": 1,
+      "refresh": "30s",
+      "panels": [
+        {
+          "type": "stat",
+          "title": "FluentD Log Lines per Second",
+          "targets": [
+            {
+              "expr": "sum(rate(fluentd_input_status_num_records_total[1m]))",
+              "refId": "A"
+            }
+          ],
+          "gridPos": { "x": 0, "y": 0, "w": 6, "h": 3 }
+        },
+        {
+          "type": "bargauge",
+          "title": "Log Rate by Tag (FluentD)",
+          "targets": [
+            {
+              "expr": "sum(rate(fluentd_input_status_num_records_total[1m])) by (tag)",
+              "refId": "B"
+            }
+          ],
+          "gridPos": { "x": 6, "y": 0, "w": 6, "h": 3 }
+        },
+        {
+          "type": "table",
+          "title": "Pod CrashLoopBackOff",
+          "targets": [
+            {
+              "expr": "kube_pod_container_status_waiting_reason{reason=\"CrashLoopBackOff\"}",
+              "refId": "C"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "renameByName": {
+                  "namespace": "Namespace",
+                  "pod": "Pod",
+                  "container": "Container",
+                  "value": "CrashLoop Count"
+                },
+                "columns": [
+                  { "selector": "namespace", "type": "string" },
+                  { "selector": "pod", "type": "string" },
+                  { "selector": "container", "type": "string" },
+                  { "selector": "value", "type": "number" }
+                ]
+              }
+            }
+          ],
+          "links": [
+            {
+              "title": "GCP Logs Viewer (Pod)",
+              "url": "https://console.cloud.google.com/logs/query;query=resource.labels.pod_name%3D%22$__cell%22",
+              "targetBlank": true
+            }
+          ],
+          "gridPos": { "x": 0, "y": 4, "w": 12, "h": 6 }
+        },
+        {
+          "type": "stat",
+          "title": "CPU Usage %",
+          "targets": [
+            {
+              "expr": "avg(rate(container_cpu_usage_seconds_total[5m])) * 100",
+              "refId": "D"
+            }
+          ],
+          "gridPos": { "x": 0, "y": 10, "w": 6, "h": 3 }
+        },
+        {
+          "type": "stat",
+          "title": "Memory Usage %",
+          "targets": [
+            {
+              "expr": "(1 - (avg(node_memory_MemAvailable_bytes) / avg(node_memory_MemTotal_bytes))) * 100",
+              "refId": "E"
+            }
+          ],
+          "gridPos": { "x": 6, "y": 10, "w": 6, "h": 3 }
+        },
+        {
+          "type": "stat",
+          "title": "Node FS Usage (Bytes)",
+          "targets": [
+            {
+              "expr": "sum(container_fs_usage_bytes)",
+              "refId": "F"
+            }
+          ],
+          "gridPos": { "x": 0, "y": 13, "w": 6, "h": 3 }
+        }
+      ]
+    }

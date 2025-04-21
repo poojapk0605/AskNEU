@@ -1,0 +1,67 @@
+replicaCount: 1
+
+image:
+  repository: poojachipmunk/fluentd-prometheus
+  tag: v3
+  pullPolicy: IfNotPresent
+
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+service:
+  type: ClusterIP
+  port: 24231
+  targetPort: 24231
+  portName: metrics
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "24231"
+  labels:
+    app.kubernetes.io/name: fluentd  # ✅ Fixed
+
+metrics:
+  enabled: true
+  port: 24231
+  path: /metrics
+  serviceMonitor:
+    enabled: true
+    interval: 15s
+    additionalLabels:
+      release: prometheus
+    scrapeTimeout: 10s
+    selector:                         # ✅ Added this
+      matchLabels:
+        app.kubernetes.io/name: fluentd
+
+extraEnv:
+  - name: FLUENTD_CONF
+    value: fluentd-prometheus.conf
+
+configMaps:
+  create: true
+  files:
+    fluentd-prometheus.conf: |
+      <system>
+        log_level info
+      </system>
+
+      <source>
+        @type prometheus
+        port 24231
+        bind 0.0.0.0
+      </source>
+
+      <source>
+        @type dummy
+        tag dummy.metrics
+      </source>
+
+      <match dummy.metrics>
+        @type null
+      </match>

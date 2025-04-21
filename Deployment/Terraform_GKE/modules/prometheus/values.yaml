@@ -1,0 +1,15 @@
+server:
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 9090
+  ingress:
+    enabled: false
+  extraScrapeConfigsSecret:
+    enabled: true
+    name: prometheus-additional-scrape-configs
+    key: additional-scrape-configs.yaml
+
+serviceMonitor:
+  enabled: true
+  interval: 15s

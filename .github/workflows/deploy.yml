@@ -44,10 +44,9 @@ jobs:
      
       - name: Build and Push Python Service Docker Image
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:latest \
-                  -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:${{ github.sha }} \
-                  ./Model Pipeline/python-service
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:latest
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:latest -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:${{ github.sha }} "./Model Pipeline/python-service"
+
+          docker  push gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:latest
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/python-service:${{ github.sha }}
       
       - name: Deploy to Vertex AI

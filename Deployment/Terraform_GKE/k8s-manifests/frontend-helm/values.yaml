@@ -1,0 +1,15 @@
+appName: frontend
+replicaCount: 1
+
+image:
+  repository: gcr.io/avian-scanner-456222-d1/react-frontend
+  tag : latest
+
+backend:
+  url: http://backend-service.proxy.svc.cluster.local:8080
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+

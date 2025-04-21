@@ -1,0 +1,18 @@
+# cert-frontend.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: frontend-cert
+  namespace: istio-ingress
+spec:
+  secretName: frontend-cert-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: "chat.poojacloud24.pw"
+  dnsNames:
+    - "chat.poojacloud24.pw"
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
