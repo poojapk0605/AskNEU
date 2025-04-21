@@ -14,7 +14,7 @@ COPY ./Data Pipeline/dags/src/requirements.txt /opt/airflow/requirements.txt
 RUN pip install --no-cache-dir -r /opt/airflow/requirements.txt \
     && pip install --no-cache-dir dvc dvc-gs
 
-# Ensure port 8080 is exposed (Cloud Run requires this)
+# Ensure port 8080 is exposed (Cloud Run requires)
 EXPOSE 8080
 
 # Use $PORT env variable from Cloud Run (defaults to 8080)
