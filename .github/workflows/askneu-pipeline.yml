@@ -49,8 +49,7 @@ jobs:
             --platform managed \
             --allow-unauthenticated \
             --memory 2Gi \
-            --cpu 1 \
-            --set-env-vars GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }},GCP_SA_KEY='${{ secrets.GCP_SA_KEY }}',PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }},OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            --cpu 1 
 
       - name: Trigger Airflow DAG
         run: |
