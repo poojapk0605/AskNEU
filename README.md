@@ -208,5 +208,9 @@ To replicate the pipeline:
   - Scraped `.txt` files appear in your GCS bucket under the `scraped_texts/` prefix.
 - After `gcs_to_pinecone_embedding` runs:
   - Embeddings are upserted to Pinecone, verifiable via the Pinecone dashboard.
+ 
+## Workflow 
+![image](https://github.com/user-attachments/assets/9953f038-09f0-48e7-9082-e17365088f13)
+
 
 
