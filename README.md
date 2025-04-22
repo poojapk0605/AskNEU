@@ -130,6 +130,91 @@ The project is driven by the goal of providing accurate information for the Nort
 
 ---
 
+## Application Architecture
+
+AskNEU follows a three-tier architecture, consisting of:
+
+1. **React Frontend**: User interface that handles the chat experience
+2. **Node.js/Express Backend**: API server that processes requests and manages data persistence
+3. **Python RAG Service**: Specialized service for retrieval-augmented generation
+
+The system combines MongoDB for data persistence with Pinecone for vector embeddings, creating a comprehensive information retrieval system.
+
+![AskNEU Architecture](https://github.com/user-attachments/assets/9953f038-09f0-48e7-9082-e17365088f13)
+
+## Backend Structure
+
+The backend (neu-chatbot-backend/) is responsible for handling API requests, storing and retrieving conversation data from MongoDB, and communicating with the LLM service.
+
+```
+neu-chatbot-backend/
+├── controllers/            # Core logic for chat and feedback processing
+├── models/                 # Mongoose models for Conversation and Feedback
+├── routes/                 # Express.js API route definitions
+├── services/               # Utility services for DB operations and validation
+├── python_service.py       # Flask-based Python service for LLM responses
+├── index.js                # Main entry point for the Express server
+├── .env / secrets.yaml     # Configuration files for MongoDB, ports, and secrets
+```
+
+### Key Backend Features
+
+- **User Management**: Google OAuth and guest user support
+- **Conversation Persistence**: Stores chat history in MongoDB
+- **Feedback Collection**: Captures user ratings on responses
+- **API Proxy**: Forwards queries to the Python RAG service
+
+### Running the Backend Locally
+
+Start the Node.js backend and Python service separately:
+
+```bash
+# Start the Node.js API server
+cd neu-chatbot-backend
+npm install
+node server.js
+
+# In a new terminal, start the LLM Python service
+python python_service.py
+```
+
+---
+
+## Frontend Structure
+
+The frontend (neu-chatbot/) is a React-based interface that enables chat interaction, feedback submission, and dynamic UI rendering with markdown support.
+
+```
+neu-chatbot/
+├── public/                 # Static files (HTML, icons, manifest)
+├── src/
+│   ├── App.js              # Main React component with chat logic
+│   ├── App.css             # Custom styles (including dark mode)
+│   ├── LoginScreen.js      # Entry screen for user sessions
+│   ├── components/         # (Optional) Modular UI components
+│   ├── utils/              # API handlers, constants, helper functions
+```
+### Key Frontend Features
+
+- **Responsive Chat Interface**: Message history with support for markdown rendering
+- **Authentication**: Google login and guest access options
+- **Theme Support**: Toggle between light and dark modes
+- **Incognito Mode**: Private conversations that aren't stored
+- **Namespaces**: Context-specific querying (Course, Classroom)
+- **Deep Search**: Enhanced search capabilities for complex queries
+- **Feedback Collection**: Thumbs up/down on responses for quality tracking
+- **Suggested Questions**: Guided starting points for new users
+
+### Running the Frontend Locally
+
+```bash
+cd neu-chatbot
+npm install
+npm start
+```
+
+---
+
 ## Code Structure
 
 - **`dags/scraping_pipeline_gcs.py`**:
@@ -211,6 +296,4 @@ To replicate the pipeline:
  
 ## Workflow 
 ![image](https://github.com/user-attachments/assets/9953f038-09f0-48e7-9082-e17365088f13)
-
-
 
