@@ -140,8 +140,6 @@ AskNEU follows a three-tier architecture, consisting of:
 
 The system combines MongoDB for data persistence with Pinecone for vector embeddings, creating a comprehensive information retrieval system.
 
-![AskNEU Architecture](https://github.com/user-attachments/assets/9953f038-09f0-48e7-9082-e17365088f13)
-
 ## Backend Structure
 
 The backend (neu-chatbot-backend/) is responsible for handling API requests, storing and retrieving conversation data from MongoDB, and communicating with the LLM service.
