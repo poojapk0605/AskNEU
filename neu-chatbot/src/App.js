@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import './App.css';
 import { marked } from 'marked';
+import IntroModal from './IntroModal';  // Change 1
 import { 
   MessageSquare, ChevronRight, X, Moon, Sun, Eye, EyeOff, 
   ThumbsUp, ThumbsDown, Copy, Radar, Send, BookOpen, School
@@ -346,7 +347,7 @@ function App({ user, onLogout }) {
   const [conversations, setConversations] = useState({
     new: {...DEFAULT_CONVERSATION}
   });
-
+  const [showIntroModal, setShowIntroModal] = useState(false); // Change 2
   // UI states
   const [isInitializing, setIsInitializing] = useState(true);
   const [input, setInput] = useState('');
@@ -362,12 +363,51 @@ function App({ user, onLogout }) {
     if (isInitializing || incognitoMode) return;
     
     try {
-      await cloudStorage.saveConversations(userId, conversations);
-      await cloudStorage.saveActiveConversation(userId, activeConversationId);
-    } catch (error) {
-      console.error("Error saving conversations:", error);
-    }
-  };
+		const nonIncognitoConversations = {};
+		Object.entries(conversations).forEach(([id, conv]) => {
+		  if (!conv.isIncognito) {
+			nonIncognitoConversations[id] = conv;
+		  }
+		});
+		
+		await cloudStorage.saveConversations(userId, nonIncognitoConversations);
+		
+		// Don't save incognito chat as active
+		if (!conversations[activeConversationId]?.isIncognito) {
+		  await cloudStorage.saveActiveConversation(userId, activeConversationId);
+		}
+	  } catch (error) {
+		console.error("Error saving conversations:", error);
+	  }
+	};
+
+	// To clean up incognito chats on page unload
+	useEffect(() => {
+	  const handleBeforeUnload = () => {
+		if (incognitoMode) {
+		  // Clear incognito conversations from localStorage
+		  const savedConversations = JSON.parse(localStorage.getItem('conversations') || '{}');
+		  const nonIncognitoConversations = {};
+		  
+		  Object.entries(savedConversations).forEach(([id, conv]) => {
+			if (!conv.isIncognito) {
+			  nonIncognitoConversations[id] = conv;
+			}
+		  });
+		  
+		  localStorage.setItem('conversations', JSON.stringify(nonIncognitoConversations));
+		  
+		  // Don't save an incognito conversation as active
+		  if (savedConversations[activeConversationId]?.isIncognito) {
+			localStorage.removeItem('activeConversationId');
+		  }
+		}
+	  };
+	    
+	  window.addEventListener('beforeunload', handleBeforeUnload);
+	  return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+	}, [incognitoMode, activeConversationId]);
+
 
   // Initialize application on first load
   useEffect(() => {
@@ -383,6 +423,17 @@ function App({ user, onLogout }) {
     
     sessionStorage.setItem('previousUser', currentUser);
   }, [user?.userId]);
+  
+  // Change 3 new useeffect
+  useEffect(() => {
+	  if (userId) {
+		const seen = localStorage.getItem(`seenIntro_${userId}`);
+		if (!seen) {
+		  setShowIntroModal(true);
+		  localStorage.setItem(`seenIntro_${userId}`, 'true');
+		}
+	  }
+  }, [userId]);
 
   useEffect(() => {
     if (isInitializing && !incognitoMode) {
@@ -612,24 +663,55 @@ function App({ user, onLogout }) {
   
   // Toggle incognito mode
   const toggleIncognitoMode = () => {
-    if (!incognitoMode) {
-      startNewChat();
-    } else {
-      // If turning off incognito, reload conversations
-      cloudStorage.loadConversations(userId).then(storedConversations => {
-        if (storedConversations) {
-          setConversations(storedConversations);
-          
-          cloudStorage.loadActiveConversation(userId).then(storedActiveId => {
-            if (storedActiveId && storedConversations[storedActiveId]) {
-              setActiveConversationId(storedActiveId);
-            }
-          });
-        }
-      });
-    }
-    setIncognitoMode(!incognitoMode);
+	  if (!incognitoMode) {
+		// Entering incognito mode
+		setIncognitoMode(true);
+		startNewChat();
+	  } else {
+		// Exiting incognito mode - FIRST completely remove all incognito chats from state
+		const updatedConversations = {};
+		Object.entries(conversations).forEach(([id, conv]) => {
+		  if (!conv.isIncognito) {
+			updatedConversations[id] = conv;
+		  }
+		});
+		
+		// Update conversations state immediately to remove all incognito chats
+		setConversations(updatedConversations);
+		
+		// If current active chat was incognito, switch to a non-incognito one
+		if (conversations[activeConversationId]?.isIncognito) {
+		  const nonIncognitoIds = Object.keys(updatedConversations);
+		  if (nonIncognitoIds.length > 0) {
+			setActiveConversationId(nonIncognitoIds[0]);
+		  } else {
+			// No non-incognito chats exist, so set incognito mode to false
+			// and create a new non-incognito chat
+			setIncognitoMode(false);
+			startNewChat();
+			return; // Return early to avoid loading saved conversations
+		  }
+		}
+		
+		// Now load saved conversations to make sure we have the latest
+		cloudStorage.loadConversations(userId).then(storedConversations => {
+		  if (storedConversations) {
+			// Replace completely instead of merging to avoid duplicates
+			setConversations(storedConversations);
+			
+			cloudStorage.loadActiveConversation(userId).then(storedActiveId => {
+			  if (storedActiveId && storedConversations[storedActiveId]) {
+				setActiveConversationId(storedActiveId);
+			  }
+			});
+		  }
+		});
+		
+		// Finally set incognitoMode to false
+		setIncognitoMode(false);
+	  }
   };
+	
 
   // Handle suggested question click
   const handleSuggestedQuestion = (question) => {
@@ -728,21 +810,34 @@ function App({ user, onLogout }) {
   
   // Start a new chat
   const startNewChat = () => {
-    const newId = 'conv_' + Date.now();
-    const newConversation = {
-      ...DEFAULT_CONVERSATION,
-      id: newId,
-      userId: userId
-    };
-    
-    setConversations(prev => ({
-      ...prev,
-      [newId]: newConversation
-    }));
-    
-    setActiveConversationId(newId);
-  };
-  
+	  const newId = 'conv_' + Date.now();
+
+	  const newConversation = {
+		id: newId,
+		title: 'New Chat',
+		messages: [{
+		  sender: 'bot',
+		  text: "Hi! I am Northeastern University Assistant. What can I help with?",
+		  activeTab: 'answer',
+		  query_id: 'welcome_message',
+		  showInitialMessage: true
+		}],
+		date: new Date().toISOString(),
+		feedback: {},
+		userId: userId,
+		isIncognito: incognitoMode      // NEW 
+	  };
+
+	  setConversations(prev => ({
+		...prev,
+		[newId]: newConversation
+	  }));
+
+	  setActiveConversationId(newId);
+	  setActiveFeedback({});
+	  setInput('');
+   };
+
   // Select a conversation
   const selectConversation = (id) => {
     setActiveConversationId(id);
@@ -750,33 +845,41 @@ function App({ user, onLogout }) {
   
   // Delete a conversation
   const deleteConversation = async (id, e) => {
-    e.stopPropagation();
+	  e.stopPropagation();
 
-    try {
-      // Remove from database
-      await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/delete`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, conversationId: id })
-      });
-    } catch (error) {
-      console.error('Error deleting conversation from server:', error);
-    }
+	  const isIncognitoChat = conversations[id]?.isIncognito;
 
-    // Update state
-    const updatedConversations = { ...conversations };
-    delete updatedConversations[id];
-    setConversations(updatedConversations);
+	  try {
+		// Only delete from database if not incognito
+		if (!isIncognitoChat) {
+		  await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/delete`, {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ userId, conversationId: id })
+		  });
+		}
+	  } catch (error) {
+		console.error('Error deleting conversation from server:', error);
+	  }
 
-    // Reset active chat if needed
-    if (id === activeConversationId) {
-      const remainingIds = Object.keys(updatedConversations);
-      if (remainingIds.length > 0) {
-        setActiveConversationId(remainingIds[0]);
-      } else {
-        startNewChat();
-      }
-    }
+	  // Update state
+	  const updatedConversations = { ...conversations };
+	  delete updatedConversations[id];
+	  setConversations(updatedConversations);
+
+	  // Reset active chat if needed
+	  if (id === activeConversationId) {
+		const remainingIds = Object.keys(updatedConversations);
+		if (remainingIds.length > 0) {
+		  setActiveConversationId(remainingIds[0]);
+		} else {
+		  // Exit incognito mode if this was the last incognito chat
+		  if (isIncognitoChat) {
+			setIncognitoMode(false);
+		  }
+		  startNewChat();
+		}
+	  }
   };
 
   // Submit user feedback on a message
@@ -898,7 +1001,7 @@ function App({ user, onLogout }) {
     return null;
   }, [activeConversation, activeFeedback]);
 
-  // Group conversations by date
+  // Group conversations by date // Updated
   function getConversationGroups() {
     const todayConversations = [];
     const previousConversations = [];
@@ -908,6 +1011,9 @@ function App({ user, onLogout }) {
 
     Object.values(conversations || {}).forEach(conv => {
       if (!conv || !Array.isArray(conv.messages) || conv.messages.length === 0) return;
+	  if ((incognitoMode && !conv.isIncognito) || (!incognitoMode && conv.isIncognito)) {
+      return;
+    }
 
       const lastMessage = conv.messages[conv.messages.length - 1];
       const lastMessageDate = new Date(lastMessage.timestamp || conv.date);
@@ -942,6 +1048,7 @@ function App({ user, onLogout }) {
 
   return (
     <div className="app">
+	  {showIntroModal && <IntroModal onClose={() => setShowIntroModal(false)} />} // Change 4
       {/* Sidebar */}
       <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
