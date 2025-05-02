@@ -5,10 +5,7 @@ Contains all configurable parameters in one centralized location.
 
 import logging
 from typing import Dict, Any
-from dotenv import load_dotenv
-import os 
-from dotenv import load_dotenv
-load_dotenv()
+
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
@@ -17,11 +14,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Replace these with your actual API keys
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-COHERE_API_KEY = os.getenv("COHERE_API_KEY")
-PINECONE_API_KEY =os.getenv("PINECONE_API_KEY")
+OPENAI_API_KEY = 
+GOOGLE_API_KEY = 
+COHERE_API_KEY = 
+PINECONE_API_KEY = 
+
 
 # Pinecone index name
 PINECONE_INDEX_NAME = "askneu"

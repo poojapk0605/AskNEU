@@ -8,6 +8,8 @@ const axios = require('axios');
 const User = require('./models/User');
 const Feedback = require('./models/Feedback');
 const Conversation = require('./models/Conversation');
+const AppFeedback = require('./models/AppFeedback');
+
 
 // Import routes
 const conversationRoutes = require('./routes/Conversation');
@@ -105,6 +107,52 @@ app.post('/api/users/check', async (req, res) => {
   }
 });
 
+app.post('/api/app-feedback/submit', async (req, res) => {
+  try {
+    const { name, email, feedback, rating, timestamp } = req.body;
+    const userId = req.body.userId || req.headers['x-user-id'] || 'anonymous';
+    
+    // Check for required fields
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required' });
+    }
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+    
+    if (!feedback) {
+      return res.status(400).json({ error: 'Feedback text is required' });
+    }
+    
+    // Simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+    
+    // Create new feedback entry
+    const appFeedback = new AppFeedback({
+      name,
+      email,
+      feedback,
+      rating: rating || 0,
+      timestamp: timestamp || new Date(),
+      userId
+    });
+    
+    await appFeedback.save();
+    
+    console.log('📝 App feedback saved:', { name, email, rating });
+    
+    return res.status(200).json({ success: true, message: 'App feedback submitted successfully' });
+  } catch (error) {
+    console.error('❌ Error saving app feedback:', error);
+    return res.status(500).json({ error: 'Failed to save app feedback' });
+  }
+});
+
+
 // Feedback endpoint
 app.post('/api/feedback', async (req, res) => {
   const query_id = req.body.query_id || req.body.queryId;
@@ -164,6 +212,45 @@ app.delete('/api/conversations/delete', async (req, res) => {
     res.status(500).json({ error: "Failed to delete conversation" });
   }
 });
+
+
+// Guest user registration endpoint NEW
+app.post('/api/users/guest', async (req, res) => {
+  try {
+    const { guestId, timestamp } = req.body;
+    
+    if (!guestId) {
+      return res.status(400).json({ error: 'Missing guestId' });
+    }
+    
+    // Check if this guest already exists
+    const existingUser = await User.findOne({ userId: guestId });
+    
+    if (existingUser) {
+      // Update last login time
+      existingUser.lastLogin = new Date();
+      await existingUser.save();
+      
+      return res.json({ success: true, exists: true });
+    }
+    
+    // Create new guest user
+    const newUser = new User({
+      userId: guestId,
+      email: `${guestId}@guest.askneu.ai`, // Placeholder email
+      authProvider: 'guest',
+      lastLogin: new Date(),
+      createdAt: timestamp ? new Date(timestamp) : new Date()
+    });
+    
+    await newUser.save();
+    
+    res.json({ success: true, exists: false });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to register guest user' });
+  }
+});
+
 
 // Start server
 const http = require('http');

@@ -28,7 +28,7 @@ const RenderApp = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="891171975069-kff4l75notakq1g7a04k4m50idcoecpl.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="">
       {user ? (
         <App user={user} onLogout={() => handleUserChange(null)} />
       ) : (

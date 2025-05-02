@@ -56,7 +56,7 @@ const LoginModal = ({ onLogin }) => {
         <div className="neu-logo-large">
           <img src="/logo.png" alt="NEU Logo" />
         </div>
-        <h2>Welcome to Ask NEU</h2>
+        <h2>Welcome to askNEU</h2>
         <p className="login-subtitle">Your AI assistant for all things Northeastern</p>
         <div className="login-options">
           <GoogleLogin 

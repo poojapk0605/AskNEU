@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from 'react';
 import './App.css';
 import { marked } from 'marked';
-import IntroModal from './IntroModal';  // Change 1
+import IntroModal from './IntroModal';
+import HelpModal from './HelpModal';
+import FeedbackModal from './FeedbackModal';
 import { 
   MessageSquare, ChevronRight, X, Moon, Sun, Eye, EyeOff, 
-  ThumbsUp, ThumbsDown, Copy, Radar, Send, BookOpen, School
+  ThumbsUp, ThumbsDown, Copy, Radar, Send, BookOpen, School,
+  HelpCircle
 } from 'lucide-react';
+
 // Memoized Message Component
 const MessageComponent = memo(({
   message, 
@@ -22,7 +26,6 @@ const MessageComponent = memo(({
 }) => {
   const [activeTab, setActiveTab] = useState(message.activeTab || 'answer');
   const [feedbackAcknowledged, setFeedbackAcknowledged] = useState(false);
-  
 
   // Get query_id directly from the message
   let query_id = message.query_id;
@@ -34,10 +37,9 @@ const MessageComponent = memo(({
       query_id = 'welcome_message';
       
       // Update the message with this query_id
-	  
       const updatedConversations = {...conversations};
       const currentConv = {...updatedConversations[activeConversationId]};
-	  currentConv.messages = Array.isArray(currentConv.messages) ? [...currentConv.messages] : [];
+      currentConv.messages = Array.isArray(currentConv.messages) ? [...currentConv.messages] : [];
       
       if (index >= 0 && index < currentConv.messages.length) {
         currentConv.messages[index] = {
@@ -49,6 +51,7 @@ const MessageComponent = memo(({
       }
     }
   }
+
 
   // Get current feedback state for this message
   const currentFeedback = query_id ? (
@@ -76,6 +79,23 @@ const MessageComponent = memo(({
       setConversations(updatedConversations);
     }
   };
+  const makeLinksOpenInNewTab = (html) => {
+	  // Create a temporary div
+	  const temp = document.createElement('div');
+	  temp.innerHTML = html;
+	  
+	  // Find all links and add target="_blank"
+	  const links = temp.getElementsByTagName('a');
+	  for (let i = 0; i < links.length; i++) {
+		links[i].setAttribute('target', '_blank');
+		links[i].setAttribute('rel', 'noopener noreferrer');
+	  }
+	  
+	  return temp.innerHTML;
+	};
+  // Check if this response was from a namespace search
+  // Only hide sources if the message has a responseNamespace that isn't 'default'
+  const hideSourcesTab = message.responseNamespace && message.responseNamespace !== 'default';
 
   return (
     <div className={`message ${message.sender}`}>
@@ -161,33 +181,36 @@ const MessageComponent = memo(({
                 </div>
               </div>
 
-              <div className="message-tabs">
-                <button 
-                  className={`tab ${activeTab === 'answer' ? 'active' : ''}`}
-                  onClick={() => handleTabChange('answer')}
-                >
-                  Answer
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'sources' ? 'active' : ''}`}
-                  onClick={() => handleTabChange('sources')}
-                >
-                  Sources
-                </button>
-              </div>
+              {/* Only show tabs if this response wasn't from a namespace search */}
+              {!hideSourcesTab && (
+                <div className="message-tabs">
+                  <button 
+                    className={`tab ${activeTab === 'answer' ? 'active' : ''}`}
+                    onClick={() => handleTabChange('answer')}
+                  >
+                    Answer
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'sources' ? 'active' : ''}`}
+                    onClick={() => handleTabChange('sources')}
+                  >
+                    Sources
+                  </button>
+                </div>
+              )}
             </>
           )}
 
           <div className="message-text">
             {message.sender === 'bot' ? (
-              activeTab === 'sources' ? (
+              (activeTab === 'sources' && !hideSourcesTab) ? (
                 message.sources ? (
-                  <div className="sources">{message.sources}</div>
-                ) : (
-                  <div className="no-sources">No sources available for this response.</div>
-                )
-              ) : (
-                <div dangerouslySetInnerHTML={{ __html: marked.parse(message.text || '') }} />
+				  <div className="sources" dangerouslySetInnerHTML={{ __html: makeLinksOpenInNewTab(marked.parse(message.sources || '')) }} />
+				) : (
+				  <div className="no-sources">No sources available for this response.</div>
+				  )
+				) : (
+				  <div dangerouslySetInnerHTML={{ __html: makeLinksOpenInNewTab(marked.parse(message.text || '')) }} />
               )
             ) : (
               message.text
@@ -198,76 +221,6 @@ const MessageComponent = memo(({
     </div>
   );
 });
-
-// Cloud storage service for persisting conversations
-const cloudStorage = {
-  // Save conversations to server
-  saveConversations: async (userId, conversations) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/save`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, conversations }),
-      });
-      
-      return response.ok;
-    } catch (error) {
-      console.warn('Error saving conversations:', error);
-      return false;
-    }
-  },
-  
-  // Load conversations from server
-  loadConversations: async (userId) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/load?userId=${userId}`);
-      
-      if (!response.ok) {
-        return null;
-      }
-      
-      const data = await response.json();
-      return data.conversations;
-    } catch (error) {
-      console.warn('Error loading conversations:', error);
-      return null;
-    }
-  },
-  
-  // Save active conversation ID
-  saveActiveConversation: async (userId, conversationId) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/active`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, activeConversationId: conversationId }),
-      });
-      
-      return response.ok;
-    } catch (error) {
-      console.warn('Error saving active conversation:', error);
-      return false;
-    }
-  },
-  
-  // Load active conversation ID
-  loadActiveConversation: async (userId) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/active?userId=${userId}`);
-      
-      if (!response.ok) {
-        return null;
-      }
-      
-      const data = await response.json();
-      return data.activeConversationId;
-    } catch (error) {
-      console.warn('Error loading active conversation:', error);
-      return null;
-    }
-  }
-};
-
 // Default conversation template
 const DEFAULT_CONVERSATION = {
   id: 'new',
@@ -283,133 +236,171 @@ const DEFAULT_CONVERSATION = {
   feedback: {}
 };
 
+// Cloud storage service - simplified
+const cloudStorage = {
+  async saveConversations(userId, conversations) {
+    try {
+      const response = await fetch('/api/conversations/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, conversations }),
+      });
+      return response.ok;
+    } catch (error) {
+      console.warn('Error saving conversations:', error);
+      return false;
+    }
+  },
+  
+  async loadConversations(userId) {
+    try {
+      const response = await fetch(`/api/conversations/load?userId=${userId}`);
+      if (!response.ok) return null;
+      const data = await response.json();
+      return data.conversations;
+    } catch (error) {
+      console.warn('Error loading conversations:', error);
+      return null;
+    }
+  },
+  
+  async saveActiveConversation(userId, conversationId) {
+    try {
+      const response = await fetch('/api/conversations/active', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, activeConversationId: conversationId }),
+      });
+      return response.ok;
+    } catch (error) {
+      console.warn('Error saving active conversation:', error);
+      return false;
+    }
+  },
+  
+  async loadActiveConversation(userId) {
+    try {
+      const response = await fetch(`/api/conversations/active?userId=${userId}`);
+      if (!response.ok) return null;
+      const data = await response.json();
+      return data.activeConversationId;
+    } catch (error) {
+      console.warn('Error loading active conversation:', error);
+      return null;
+    }
+  }
+};
+
 // Main App component
 function App({ user, onLogout }) {
+  // State for modals
+  const [showIntroModal, setShowIntroModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || '/api';
-
-  const handleLogout = () => {
-    // Clear storage to prevent data leakage
-    sessionStorage.clear();
-    localStorage.removeItem('activeConversationId');
-    
-    // Reset application state
-    setConversations({ new: {...DEFAULT_CONVERSATION} });
-    setActiveConversationId('new');
-    setActiveFeedback({});
-    setUserId(`user_${Date.now()}`);
-    
-    if (onLogout) onLogout();
-    
-    // Hard reload
-    window.location.href = '/';
-  };
-
+  
   // User ID for storage
   const [userId, setUserId] = useState(() => {
-    // Always prioritize the user ID from login
     if (user?.userId) return user.userId;
-    
-    // Fallback to existing saved ID
     const existing = sessionStorage.getItem('userId');
     if (existing) return existing;
-
-    // Last resort: create a new one
     const newId = `user_${Date.now()}`;
     sessionStorage.setItem('userId', newId);
     return newId;
   });
 
-  useEffect(() => {
-    if (user?.userId && user.userId !== userId) {
-      setUserId(user.userId);
-      sessionStorage.setItem('userId', user.userId);
-    }
-  }, [user?.userId]);
-
-  // Theme state
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedPreference = localStorage.getItem('darkMode');
-    return savedPreference === 'true';
-  });
-
-  // Chat settings
+  // Theme and chat settings
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
   const [incognitoMode, setIncognitoMode] = useState(false);
   const [deepSearchMode, setDeepSearchMode] = useState(false);
   const [namespace, setNamespace] = useState("default");
   const [searchMode, setSearchMode] = useState("direct");
 
-  // Feedback state
-  const [activeFeedback, setActiveFeedback] = useState({});
+  // Namespace labels and info
+  const namespaceLabels = {
+    default: "Default",
+    course: "Course Offerings",
+    classroom: "Study Spot Finder"
+  };
+  
+  const namespaceUpdateInfo = {
+	  course: {
+		desktop: "Last updated: Fall 2025 offerings",
+		mobile: "Fall 2025 offerings"
+	  },
+	  classroom: {
+		desktop: "Last updated: Spring 2025 schedule",
+		mobile: "Spring 2025 schedule"
+	  }
+  };
 
-  // Conversation states with default value
+  // Conversation states
+  const [activeFeedback, setActiveFeedback] = useState({});
   const [activeConversationId, setActiveConversationId] = useState('new');
-  const [conversations, setConversations] = useState({
-    new: {...DEFAULT_CONVERSATION}
-  });
-  const [showIntroModal, setShowIntroModal] = useState(false); // Change 2
+  const [conversations, setConversations] = useState({ new: {...DEFAULT_CONVERSATION} });
+
   // UI states
   const [isInitializing, setIsInitializing] = useState(true);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Start collapsed
 
   // References for DOM elements
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
 
+  // Logout handler
+  const handleLogout = () => {
+    sessionStorage.clear();
+    localStorage.removeItem('activeConversationId');
+    setConversations({ new: {...DEFAULT_CONVERSATION} });
+    setActiveConversationId('new');
+    setActiveFeedback({});
+    setUserId(`user_${Date.now()}`);
+    if (onLogout) onLogout();
+    window.location.href = '/';
+  };
+  const getPlaceholderText = () => {
+	  switch(namespace) {
+		case 'course':
+		  return "Find any course offering";
+		case 'classroom':
+		  return "Specify day, time, and room if possible";
+		default:
+		  return "Ask anything about Northeastern University — we've got you covered!";
+	  }
+  };
   // Save conversations to server
   const saveConversationsToServer = async () => {
     if (isInitializing || incognitoMode) return;
     
     try {
-		const nonIncognitoConversations = {};
-		Object.entries(conversations).forEach(([id, conv]) => {
-		  if (!conv.isIncognito) {
-			nonIncognitoConversations[id] = conv;
-		  }
-		});
-		
-		await cloudStorage.saveConversations(userId, nonIncognitoConversations);
-		
-		// Don't save incognito chat as active
-		if (!conversations[activeConversationId]?.isIncognito) {
-		  await cloudStorage.saveActiveConversation(userId, activeConversationId);
-		}
-	  } catch (error) {
-		console.error("Error saving conversations:", error);
-	  }
-	};
+      const nonIncognitoConversations = {};
+      Object.entries(conversations).forEach(([id, conv]) => {
+        if (!conv.isIncognito) {
+          nonIncognitoConversations[id] = conv;
+        }
+      });
+      
+      await cloudStorage.saveConversations(userId, nonIncognitoConversations);
+      
+      if (!conversations[activeConversationId]?.isIncognito) {
+        await cloudStorage.saveActiveConversation(userId, activeConversationId);
+      }
+    } catch (error) {
+      console.error("Error saving conversations:", error);
+    }
+  };
 
-	// To clean up incognito chats on page unload
-	useEffect(() => {
-	  const handleBeforeUnload = () => {
-		if (incognitoMode) {
-		  // Clear incognito conversations from localStorage
-		  const savedConversations = JSON.parse(localStorage.getItem('conversations') || '{}');
-		  const nonIncognitoConversations = {};
-		  
-		  Object.entries(savedConversations).forEach(([id, conv]) => {
-			if (!conv.isIncognito) {
-			  nonIncognitoConversations[id] = conv;
-			}
-		  });
-		  
-		  localStorage.setItem('conversations', JSON.stringify(nonIncognitoConversations));
-		  
-		  // Don't save an incognito conversation as active
-		  if (savedConversations[activeConversationId]?.isIncognito) {
-			localStorage.removeItem('activeConversationId');
-		  }
-		}
-	  };
-	    
-	  window.addEventListener('beforeunload', handleBeforeUnload);
-	  return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-	}, [incognitoMode, activeConversationId]);
+  // Update user ID when the user changes
+  useEffect(() => {
+    if (user?.userId && user.userId !== userId) {
+      setUserId(user.userId);
+      sessionStorage.setItem('userId', user.userId);
+    }
+  }, [user?.userId, userId]);
 
-
-  // Initialize application on first load
+  // Check for user changes on initial load
   useEffect(() => {
     const storedUser = sessionStorage.getItem('previousUser');
     const currentUser = user?.userId || 'guest';
@@ -424,17 +415,25 @@ function App({ user, onLogout }) {
     sessionStorage.setItem('previousUser', currentUser);
   }, [user?.userId]);
   
-  // Change 3 new useeffect
+  // Show intro modal for new users
   useEffect(() => {
-	  if (userId) {
-		const seen = localStorage.getItem(`seenIntro_${userId}`);
-		if (!seen) {
-		  setShowIntroModal(true);
-		  localStorage.setItem(`seenIntro_${userId}`, 'true');
-		}
-	  }
+    if (userId) {
+      const seen = localStorage.getItem(`seenIntro_${userId}`);
+      if (!seen) {
+        setShowIntroModal(true);
+        localStorage.setItem(`seenIntro_${userId}`, 'true');
+      }
+      
+      // For first time users, collapse sidebar by default
+      const seenApp = localStorage.getItem(`seenApp_${userId}`);
+      if (!seenApp) {
+        setSidebarOpen(false);
+        localStorage.setItem(`seenApp_${userId}`, 'true');
+      }
+    }
   }, [userId]);
 
+  // Load conversations on initialization
   useEffect(() => {
     if (isInitializing && !incognitoMode) {
       const currentUserId = user?.userId || userId;
@@ -449,7 +448,6 @@ function App({ user, onLogout }) {
           if (activeId && loadedConvs[activeId]) {
             setActiveConversationId(activeId);
           } else {
-            // Default to first conversation or new
             const firstId = Object.keys(loadedConvs)[0];
             setActiveConversationId(firstId || 'new');
           }
@@ -463,7 +461,7 @@ function App({ user, onLogout }) {
     }
   }, [isInitializing, incognitoMode, userId, user]);
  
-  // Get current active conversation with robust fallback
+  // Get current active conversation with fallback
   const activeConversation =
     conversations && conversations[activeConversationId] && Array.isArray(conversations[activeConversationId].messages)
       ? conversations[activeConversationId]
@@ -471,13 +469,31 @@ function App({ user, onLogout }) {
         ? conversations.new
         : { ...DEFAULT_CONVERSATION };
 
-  // Suggested questions for welcome screen
-  const suggestedQuestions = [
-    "What are the admission requirements for master/PhD programs?",
-    "Tell me about housing options for graduate students",
-    "How do I apply for research assistantships?",
-    "What student resources are available for international students?"
-  ];
+  // Get suggested questions based on namespace
+  const getSuggestedQuestions = () => {
+    if (namespace === 'course') {
+      return [
+        "What are the class timings and classroom location for CHEM 1211: General Chemistry 1?",
+        "Could you provide more details about LAW 6403: Constitutional Law?",
+        "Which professor is teaching CS 5500: Data Science Capstone during the fall semester?",
+        "What are the prerequisites for ESLG 0130: Community Learning 2?"
+      ];
+    } else if (namespace === 'classroom') {
+      return [
+        "Can you suggest a good study spot on campus for Monday at 2 PM where I can stay for a few hours?",
+        "What are my options for finding a study spot in Churchill Hall on Monday afternoon?",
+        "Is Dodge Hall 050 available for two hours on Monday?",
+        "What are the hours for ISEC study spaces?"
+      ];
+    } else {
+      return [
+        "How can I request a new Northeastern ID card?",
+        "How do I waive my Northeastern health insurance?",
+        "As an international student, can I work as both a Teaching Assistant (TA) and a Research Assistant (RA) at the same time?",
+        "What parking options are available on Boston campus?"
+      ];
+    }
+  };
 
   // Save conversations with debouncing
   useEffect(() => {
@@ -508,12 +524,36 @@ function App({ user, onLogout }) {
     localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
-  // Set the document title
+  // Set document title
   useEffect(() => {
-    document.title = "Ask NEU";
+    document.title = "askNEU";
   }, []);
   
-  // Hide greeting message after user sends first message
+  // Register guest users
+  useEffect(() => {
+    const registerGuestUser = async () => {
+      if (userId && (userId.startsWith('user_') || userId.startsWith('guest_'))) {
+        try {
+          await fetch('/api/users/guest', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              guestId: userId,
+              timestamp: new Date().toISOString()
+            })
+          });
+        } catch (err) {
+          // Silent fail - conversation saving will still work
+        }
+      }
+    };
+    
+    if (userId && !isInitializing) {
+      registerGuestUser();
+    }
+  }, [userId, isInitializing]);
+  
+  // Hide greeting message after first user message
   useEffect(() => {
     if (activeConversation?.messages?.length > 1 && 
       activeConversation.messages[0].showInitialMessage) {
@@ -546,14 +586,14 @@ function App({ user, onLogout }) {
       currentConv.messages = [];
     }
     
-    // Update title if this is the first user message
+    // Update title if first user message
     if (!currentConv.title || currentConv.title === 'New Chat') {
       currentConv.title = input.length > 30 
         ? input.substring(0, 30) + '...' 
         : input;
     }
     
-    // Add user message to conversation
+    // Add user message
     currentConv.messages.push({ 
       sender: 'user', 
       text: input, 
@@ -563,7 +603,7 @@ function App({ user, onLogout }) {
     updatedConversations[activeConversationId] = currentConv;
     setConversations(updatedConversations);
     
-    // Clear input field and set loading state
+    // Clear input and set loading
     setInput('');
     setIsLoading(true);
 
@@ -571,7 +611,7 @@ function App({ user, onLogout }) {
     try {
       const actualSearchMode = deepSearchMode ? "deepsearch" : searchMode;
       
-      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/chat`, {
+      const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -588,25 +628,26 @@ function App({ user, onLogout }) {
       
       const data = await res.json();
       
-      // Update conversations state with bot response
+      // Update with bot response
       const withResponseConversations = { ...updatedConversations };
       const withResponseConv = { ...withResponseConversations[activeConversationId] };
       
-      // Create bot message for conversation
-      const responseMessage = { 
-        sender: 'bot', 
-        text: data.answer || "Sorry, I couldn't generate a response.",
-        timestamp: new Date().toISOString(),
-        sources: Array.isArray(data.sources) ? data.sources.join("\n") : (data.sources || ""),
-        query_id: data.query_id,
-        processingTime: data.processing_time || 0,
-        searchMode: data.search_mode || actualSearchMode,
-        activeTab: 'answer'
-      };
+      // Create bot message
+	  const responseMessage = { 
+		  sender: 'bot', 
+		  text: data.answer || "Sorry, I couldn't generate a response.",
+		  timestamp: new Date().toISOString(),
+		  sources: Array.isArray(data.sources) ? data.sources.join("\n") : (data.sources || ""),
+		  query_id: data.query_id,
+		  processingTime: data.processing_time || 0,
+		  searchMode: data.search_mode || actualSearchMode,
+		  responseNamespace: namespace, // Add this line
+		  activeTab: 'answer'
+	  };
       
       withResponseConv.messages.push(responseMessage);
       
-      // Initialize feedback for this message
+      // Initialize feedback
       if (!withResponseConv.feedback) {
         withResponseConv.feedback = {};
       }
@@ -617,11 +658,10 @@ function App({ user, onLogout }) {
     } catch (err) {
       console.error("Error in API call:", err.message);
       
-      // Add error message to conversation
+      // Add error message
       const withErrorConversations = { ...updatedConversations };
       const withErrorConv = { ...withErrorConversations[activeConversationId] };
       
-      // Create error message
       const errorResponseMessage = { 
         sender: 'bot', 
         text: 'Could not contact backend. Check connection or try again later.',
@@ -652,7 +692,7 @@ function App({ user, onLogout }) {
   const toggleDarkMode = () => setDarkMode(!darkMode);
   const toggleDeepSearch = () => setDeepSearchMode(!deepSearchMode);
   
-  // Set namespace or perform an action
+  // Set namespace or perform action
   const handleSpecialAction = (action) => {
     if (action === "course" || action === "classroom") {
       setNamespace(prev => (prev === action ? "default" : action));
@@ -663,71 +703,64 @@ function App({ user, onLogout }) {
   
   // Toggle incognito mode
   const toggleIncognitoMode = () => {
-	  if (!incognitoMode) {
-		// Entering incognito mode
-		setIncognitoMode(true);
-		startNewChat();
-	  } else {
-		// Exiting incognito mode - FIRST completely remove all incognito chats from state
-		const updatedConversations = {};
-		Object.entries(conversations).forEach(([id, conv]) => {
-		  if (!conv.isIncognito) {
-			updatedConversations[id] = conv;
-		  }
-		});
-		
-		// Update conversations state immediately to remove all incognito chats
-		setConversations(updatedConversations);
-		
-		// If current active chat was incognito, switch to a non-incognito one
-		if (conversations[activeConversationId]?.isIncognito) {
-		  const nonIncognitoIds = Object.keys(updatedConversations);
-		  if (nonIncognitoIds.length > 0) {
-			setActiveConversationId(nonIncognitoIds[0]);
-		  } else {
-			// No non-incognito chats exist, so set incognito mode to false
-			// and create a new non-incognito chat
-			setIncognitoMode(false);
-			startNewChat();
-			return; // Return early to avoid loading saved conversations
-		  }
-		}
-		
-		// Now load saved conversations to make sure we have the latest
-		cloudStorage.loadConversations(userId).then(storedConversations => {
-		  if (storedConversations) {
-			// Replace completely instead of merging to avoid duplicates
-			setConversations(storedConversations);
-			
-			cloudStorage.loadActiveConversation(userId).then(storedActiveId => {
-			  if (storedActiveId && storedConversations[storedActiveId]) {
-				setActiveConversationId(storedActiveId);
-			  }
-			});
-		  }
-		});
-		
-		// Finally set incognitoMode to false
-		setIncognitoMode(false);
-	  }
+    if (!incognitoMode) {
+      // Entering incognito mode
+      setIncognitoMode(true);
+      startNewChat();
+    } else {
+      // Exiting incognito mode
+      const updatedConversations = {};
+      Object.entries(conversations).forEach(([id, conv]) => {
+        if (!conv.isIncognito) {
+          updatedConversations[id] = conv;
+        }
+      });
+      
+      setConversations(updatedConversations);
+      
+      if (conversations[activeConversationId]?.isIncognito) {
+        const nonIncognitoIds = Object.keys(updatedConversations);
+        if (nonIncognitoIds.length > 0) {
+          setActiveConversationId(nonIncognitoIds[0]);
+        } else {
+          setIncognitoMode(false);
+          startNewChat();
+          return;
+        }
+      }
+      
+      // Load saved conversations
+      cloudStorage.loadConversations(userId).then(storedConversations => {
+        if (storedConversations) {
+          setConversations(storedConversations);
+          
+          cloudStorage.loadActiveConversation(userId).then(storedActiveId => {
+            if (storedActiveId && storedConversations[storedActiveId]) {
+              setActiveConversationId(storedActiveId);
+            }
+          });
+        }
+      });
+      
+      setIncognitoMode(false);
+    }
   };
 	
-
   // Handle suggested question click
   const handleSuggestedQuestion = (question) => {
-    // Add the user message to the UI
+    // Add the user message
     const updatedConversations = { ...conversations };
     const currentConv = { ...updatedConversations[activeConversationId] };
     if (!Array.isArray(currentConv.messages)) currentConv.messages = [];
     
-    // Update title if this is the first message
+    // Update title if first message
     if (!currentConv.title || currentConv.title === 'New Chat') {
       currentConv.title = question.length > 30 
         ? question.substring(0, 30) + '...' 
         : question;
     }
     
-    // Add user message
+    // Add message
     currentConv.messages.push({ 
       sender: 'user', 
       text: question, 
@@ -737,14 +770,14 @@ function App({ user, onLogout }) {
     updatedConversations[activeConversationId] = currentConv;
     setConversations(updatedConversations);
     
-    // Clear input field and set loading state
+    // Clear input and set loading
     setInput('');
     setIsLoading(true);
     
     // Send message to API
     const actualSearchMode = deepSearchMode ? "deepsearch" : searchMode;
     
-     fetch(`${process.env.REACT_APP_API_BASE_URL}/api/chat`, {
+    fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -761,24 +794,24 @@ function App({ user, onLogout }) {
       return response.json();
     })
     .then(data => {
-      // Update conversation with the bot's response
+      // Update with bot response
       const withResponseConversations = { ...updatedConversations };
       const withResponseConv = { ...withResponseConversations[activeConversationId] };
       
-      const responseMessage = { 
-        sender: 'bot', 
-        text: data.answer || "Sorry, I couldn't generate a response.",
-        timestamp: new Date().toISOString(),
-        sources: Array.isArray(data.sources) ? data.sources.join("\n") : (data.sources || ""),
-        query_id: data.query_id,
-        processingTime: data.processing_time || 0,
-        searchMode: data.search_mode || actualSearchMode,
-        activeTab: 'answer'
-      };
-      
+	  const responseMessage = { 
+		  sender: 'bot', 
+		  text: data.answer || "Sorry, I couldn't generate a response.",
+		  timestamp: new Date().toISOString(),
+		  sources: Array.isArray(data.sources) ? data.sources.join("\n") : (data.sources || ""),
+		  query_id: data.query_id,
+		  processingTime: data.processing_time || 0,
+		  searchMode: data.search_mode || actualSearchMode,
+		  responseNamespace: namespace, // Add the namespace that was used for this response
+		  activeTab: 'answer'
+	  };      
       withResponseConv.messages.push(responseMessage);
       
-      // Initialize feedback for this message
+      // Initialize feedback
       if (!withResponseConv.feedback) {
         withResponseConv.feedback = {};
       }
@@ -810,88 +843,85 @@ function App({ user, onLogout }) {
   
   // Start a new chat
   const startNewChat = () => {
-	  const newId = 'conv_' + Date.now();
+    const newId = 'conv_' + Date.now();
 
-	  const newConversation = {
-		id: newId,
-		title: 'New Chat',
-		messages: [{
-		  sender: 'bot',
-		  text: "Hi! I am Northeastern University Assistant. What can I help with?",
-		  activeTab: 'answer',
-		  query_id: 'welcome_message',
-		  showInitialMessage: true
-		}],
-		date: new Date().toISOString(),
-		feedback: {},
-		userId: userId,
-		isIncognito: incognitoMode      // NEW 
-	  };
+    const newConversation = {
+      id: newId,
+      title: 'New Chat',
+      messages: [{
+        sender: 'bot',
+        text: "Hi! I am Northeastern University Assistant. What can I help with?",
+        activeTab: 'answer',
+        query_id: 'welcome_message',
+        showInitialMessage: true
+      }],
+      date: new Date().toISOString(),
+      feedback: {},
+      userId: userId,
+      isIncognito: incognitoMode
+    };
 
-	  setConversations(prev => ({
-		...prev,
-		[newId]: newConversation
-	  }));
+    setConversations(prev => ({
+      ...prev,
+      [newId]: newConversation
+    }));
 
-	  setActiveConversationId(newId);
-	  setActiveFeedback({});
-	  setInput('');
-   };
+    setActiveConversationId(newId);
+    setActiveFeedback({});
+    setInput('');
+  };
 
-  // Select a conversation
   const selectConversation = (id) => {
     setActiveConversationId(id);
   };
   
   // Delete a conversation
   const deleteConversation = async (id, e) => {
-	  e.stopPropagation();
+    e.stopPropagation();
 
-	  const isIncognitoChat = conversations[id]?.isIncognito;
+    const isIncognitoChat = conversations[id]?.isIncognito;
 
-	  try {
-		// Only delete from database if not incognito
-		if (!isIncognitoChat) {
-		  await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/conversations/delete`, {
-			method: 'DELETE',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ userId, conversationId: id })
-		  });
-		}
-	  } catch (error) {
-		console.error('Error deleting conversation from server:', error);
-	  }
+    try {
+      // Only delete from DB if not incognito
+      if (!isIncognitoChat) {
+        await fetch('/api/conversations/delete', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, conversationId: id })
+        });
+      }
+    } catch (error) {
+      console.error('Error deleting conversation from server:', error);
+    }
 
-	  // Update state
-	  const updatedConversations = { ...conversations };
-	  delete updatedConversations[id];
-	  setConversations(updatedConversations);
+    // Update state
+    const updatedConversations = { ...conversations };
+    delete updatedConversations[id];
+    setConversations(updatedConversations);
 
-	  // Reset active chat if needed
-	  if (id === activeConversationId) {
-		const remainingIds = Object.keys(updatedConversations);
-		if (remainingIds.length > 0) {
-		  setActiveConversationId(remainingIds[0]);
-		} else {
-		  // Exit incognito mode if this was the last incognito chat
-		  if (isIncognitoChat) {
-			setIncognitoMode(false);
-		  }
-		  startNewChat();
-		}
-	  }
+    // Reset active chat if needed
+    if (id === activeConversationId) {
+      const remainingIds = Object.keys(updatedConversations);
+      if (remainingIds.length > 0) {
+        setActiveConversationId(remainingIds[0]);
+      } else {
+        if (isIncognitoChat) {
+          setIncognitoMode(false);
+        }
+        startNewChat();
+      }
+    }
   };
 
-  // Submit user feedback on a message
+  // Submit feedback on a message
   const submitFeedback = async (messageIndexOrQueryId, rating) => {
-    // Check if we received a query_id directly (string) or an index (number)
     const isQueryId = typeof messageIndexOrQueryId === 'string';
     
     let message;
     let query_id;
     
     if (isQueryId) {
-      // We got a query_id directly
+      // Got query_id directly
       query_id = messageIndexOrQueryId;
       const conversation = conversations[activeConversationId];
       if (!conversation || !Array.isArray(conversation.messages)) {
@@ -901,11 +931,10 @@ function App({ user, onLogout }) {
       
       message = conversation.messages.find(msg => msg.query_id === query_id);
       if (!message) {
-        // Use the query_id directly without requiring a message
         message = { sender: 'bot', query_id };
       }
     } else {
-      // We got an index, get the message at that index
+      // Got an index
       const messageIndex = messageIndexOrQueryId;
       const conversation = conversations[activeConversationId];
       if (!conversation || !Array.isArray(conversation.messages)) {
@@ -926,10 +955,10 @@ function App({ user, onLogout }) {
       }
     }
     
-    // Update UI state immediately for responsiveness
+    // Update UI state immediately
     setActiveFeedback(prev => ({ ...prev, [query_id]: rating }));
     
-    // Update persistent state in conversations
+    // Update persistent state
     setConversations(prev => {
       const updated = { ...prev };
       if (!updated[activeConversationId].feedback) {
@@ -939,14 +968,14 @@ function App({ user, onLogout }) {
       return updated;
     });
 
-    // Skip API call if in incognito mode
+    // Skip API if incognito
     if (incognitoMode) {
       return;
     }
 
     // Make API call to save feedback
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/feedback`, {
+      const response = await fetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -969,7 +998,7 @@ function App({ user, onLogout }) {
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
       .then(() => {
-        // Temporary "Copied!" notification
+        // Temporary notification
         const copiedEl = document.createElement('div');
         copiedEl.className = 'copy-notification';
         copiedEl.innerText = 'Copied!';
@@ -988,7 +1017,7 @@ function App({ user, onLogout }) {
   const getFeedbackForMessage = useCallback((query_id) => {
     if (!query_id) return null;
     
-    // First check activeFeedback state (temporary UI state)
+    // Check activeFeedback state first
     if (activeFeedback && query_id in activeFeedback) {
       return activeFeedback[query_id];
     }
@@ -1001,7 +1030,7 @@ function App({ user, onLogout }) {
     return null;
   }, [activeConversation, activeFeedback]);
 
-  // Group conversations by date // Updated
+  // Group conversations by date
   function getConversationGroups() {
     const todayConversations = [];
     const previousConversations = [];
@@ -1011,9 +1040,9 @@ function App({ user, onLogout }) {
 
     Object.values(conversations || {}).forEach(conv => {
       if (!conv || !Array.isArray(conv.messages) || conv.messages.length === 0) return;
-	  if ((incognitoMode && !conv.isIncognito) || (!incognitoMode && conv.isIncognito)) {
-      return;
-    }
+      if ((incognitoMode && !conv.isIncognito) || (!incognitoMode && conv.isIncognito)) {
+        return;
+      }
 
       const lastMessage = conv.messages[conv.messages.length - 1];
       const lastMessageDate = new Date(lastMessage.timestamp || conv.date);
@@ -1025,7 +1054,7 @@ function App({ user, onLogout }) {
       }
     });
 
-    // Sort by latest message timestamp (newest first)
+    // Sort by latest (newest first)
     const sortByLatest = (a, b) => {
       const timeA = new Date(a.messages[a.messages.length - 1]?.timestamp || a.date);
       const timeB = new Date(b.messages[b.messages.length - 1]?.timestamp || b.date);
@@ -1038,7 +1067,7 @@ function App({ user, onLogout }) {
     return { todayConversations, previousConversations };
   }
 
-  // Filter out messages that are hidden with null check
+  // Filter out hidden messages
   const visibleMessages = activeConversation?.messages ? 
     activeConversation.messages.filter(
       message => message.sender !== 'bot' || message.showInitialMessage !== false
@@ -1048,7 +1077,19 @@ function App({ user, onLogout }) {
 
   return (
     <div className="app">
-	  {showIntroModal && <IntroModal onClose={() => setShowIntroModal(false)} />} // Change 4
+      {/* Modal components */}
+      {showIntroModal && <IntroModal onClose={() => setShowIntroModal(false)} />}
+	  {showHelpModal && (
+		  <HelpModal 
+			onClose={() => setShowHelpModal(false)} 
+			onFeedbackClick={() => {
+			  setShowHelpModal(false);
+			  setShowFeedbackModal(true);
+			}}
+		  />
+	   )}
+	  {showFeedbackModal && <FeedbackModal onClose={() => setShowFeedbackModal(false)} />}
+      
       {/* Sidebar */}
       <div className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
@@ -1119,142 +1160,149 @@ function App({ user, onLogout }) {
 
       {/* Main content */}
       <div className={`main-content ${sidebarOpen ? '' : 'expanded'}`}>
-        <div className="user-bar">
-          
-          
-        </div>    
-		<header className="main-header">
-		  {/* Left-side (namespace display) */}
+        <header className="main-header">
+          {/* Left-side (namespace display) */} 
 		  <div className="header-left">
-			{!sidebarOpen && (
-			  <button className="menu-btn" onClick={toggleSidebar} aria-label="Toggle sidebar">
-				<MessageSquare size={20} />
-			  </button>
-			)}
-			{namespace !== 'default' && (
-			  <div className="namespace-status">
-				Namespace: <strong>{namespace}</strong>
-			  </div>
-			)}
-		  </div>
-
-		  {/* Center with logo and title */}
-		  <div className="header-center">
-			<img src="/logo.png" alt="NEU Logo" className="neu-logo" />
-			<span className="header-title">Ask NEU</span>
-		  </div>
-
-		  {/* Right-side icons */}
-		  <div className="header-right">
-			<button
-			  className={`mode-toggle ${incognitoMode ? 'active' : ''}`}
-			  onClick={toggleIncognitoMode}
-			  title={incognitoMode ? "Turn Off Incognito Mode" : "Turn On Incognito Mode"}
-			  aria-label={incognitoMode ? "Turn Off Incognito Mode" : "Turn On Incognito Mode"}
-			>
-			  {incognitoMode ? <EyeOff size={18} /> : <Eye size={18} />}
-			</button>
-			<button
-			  className="theme-toggle"
-			  onClick={toggleDarkMode}
-			  title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-			  aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-			>
-			  {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-			</button>
-			<div className="user-menu">
-			  <img
-				src={user?.picture || `https://ui-avatars.com/api/?name=${user?.name || 'G'}&background=cc0000&color=fff`}
-				alt="User Avatar"
-				className="user-avatar"
-				onClick={() => setShowMenu(!showMenu)}
-			  />
-			  {showMenu && (
-				<div className="user-dropdown">
-				  <div className="user-name">{user?.name || 'Guest'}</div>
-				  <button onClick={user?.email === 'guest@askneu.ai' ? () => {
-					// Clear user from session storage to trigger login screen
-					sessionStorage.removeItem('user');
-					window.location.reload();
-				  } : handleLogout}>
-					{user?.email === 'guest@askneu.ai' ? 'Login' : 'Logout'}
-				  </button>
-				</div>
+			  {!sidebarOpen && (
+				<button className="menu-btn" onClick={toggleSidebar} aria-label="Toggle sidebar">
+				  <MessageSquare size={20} />
+				</button>
 			  )}
-			</div>
-		  </div>
-		</header>		
-        
-        <div className="chat-container">
-		{activeConversation && activeConversation.messages && 
-		 activeConversation.messages.length === 1 && 
-		 activeConversation.messages[0].sender === 'bot' ? (
-		  <div className="welcome-screen">
-			<div className="neu-logo-large">
-			  <img src="/logo.png" alt="NEU Logo" />
-			</div>
-			<h2>Hi! I am Northeastern University Assistant. What can I help with?</h2>
+			  
+			  <div className="status-indicators">  
+			  {namespace !== 'default' && (
+				  <div className="namespace-status">
+					<span className="desktop-only">
+					  Search Space: <strong>{namespaceLabels[namespace]}</strong>
+					</span>
+					<span className="mobile-only">
+					  <strong>{namespace === 'course' ? 'Course Offerings' : namespace === 'classroom' ? 'Study Spot Finder' : ''}</strong>
+					</span>
+					{namespaceUpdateInfo[namespace] && (
+					  <div className="namespace-update-info">
+						<span className="desktop-only">{namespaceUpdateInfo[namespace].desktop}</span>
+						<span className="mobile-only">{namespaceUpdateInfo[namespace].mobile}</span>
+					  </div>
+					)}
+				  </div>
+			  )}
 			
-			<div className="suggested-questions-grid">
-			  <button 
-				className="suggested-question"
-				onClick={() => handleSuggestedQuestion("What are the admission requirements for master/PhD programs?")}
-			  >
-				<MessageSquare size={18} className="suggested-question-icon" />
-				<span>What are the admission requirements for master/PhD programs?</span>
-			  </button>
-			  
-			  <button 
-				className="suggested-question"
-				onClick={() => handleSuggestedQuestion("Tell me about housing options for graduate students")}
-			  >
-				<MessageSquare size={18} className="suggested-question-icon" />
-				<span>Tell me about housing options for graduate students</span>
-			  </button>
-			  
-			  <button 
-				className="suggested-question"
-				onClick={() => handleSuggestedQuestion("How do I apply for research assistantships?")}
-			  >
-				<MessageSquare size={18} className="suggested-question-icon" />
-				<span>How do I apply for research assistantships?</span>
-			  </button>
-			  
-			  <button 
-				className="suggested-question"
-				onClick={() => handleSuggestedQuestion("What student resources are available for international students?")}
-			  >
-				<MessageSquare size={18} className="suggested-question-icon" />
-				<span>What student resources are available for international students?</span>
-			  </button>
-			</div>
-			
-			<div className="namespace-options">
-			  <button
-				className={`namespace-option ${namespace === 'course' ? 'active' : ''}`}
-				onClick={() => handleSpecialAction('course')}
-			  >
-				<BookOpen 
-				  size={18} 
-				  style={{
-					  color: namespace === 'course' ? 'white' : '#3b82f6'}}/>
-				Course information
-			  </button>
+			  {deepSearchMode && (
+				  <div className="deep-search-badge deep-search-only">
+					  <Radar size={15} className="deep-search-icon" />
+					  <span>Deep Research Active</span>
+				  </div>
+			  )}
 
-			  <button
-				className={`namespace-option ${namespace === 'classroom' ? 'active' : ''}`}
-				onClick={() => handleSpecialAction('classroom')}
-			  >
-				<School
-				  size={18} 
-				  style={{
-					  color: namespace === 'classroom' ? 'white' : '#a855f7'}}/>
-				Classroom resources
-			  </button>
-			</div>
+			  </div>
 		  </div>
-		) : (
-		  <div className="messages">
+          {/* Center with logo and title */}
+          <div className="header-center">
+            <img src="/logo_new.png" alt="askNEU logo" className="neu-logo" />
+          </div>
+
+          {/* Right-side icons with Help button */}
+          <div className="header-right">
+            <button
+              className="help-btn"
+              onClick={() => setShowHelpModal(true)}
+              title="Help & Information"
+              aria-label="Help and Information"
+            >
+              <HelpCircle size={18} />
+            </button>
+            <button
+              className={`mode-toggle ${incognitoMode ? 'active' : ''}`}
+              onClick={toggleIncognitoMode}
+              title={incognitoMode ? "Turn Off Incognito Mode" : "Turn On Incognito Mode"}
+              aria-label={incognitoMode ? "Turn Off Incognito Mode" : "Turn On Incognito Mode"}
+            >
+              {incognitoMode ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+            <button
+              className="theme-toggle"
+              onClick={toggleDarkMode}
+              title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <div className="user-menu">
+              <img
+                src={user?.picture || `https://ui-avatars.com/api/?name=${user?.name || 'G'}&background=cc0000&color=fff`}
+                alt="User Avatar"
+                className="user-avatar"
+                onClick={() => setShowMenu(!showMenu)}
+              />
+              {showMenu && (
+                <div className="user-dropdown">
+                  <div className="user-name">{user?.name || 'Guest'}</div>
+                  <button onClick={user?.email === 'guest@askneu.ai' ? () => {
+                    sessionStorage.removeItem('user');
+                    window.location.reload();
+                  } : handleLogout}>
+                    {user?.email === 'guest@askneu.ai' ? 'Login' : 'Logout'}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>		
+        <div className="chat-container">
+        {activeConversation && activeConversation.messages && 
+         activeConversation.messages.length === 1 && 
+         activeConversation.messages[0].sender === 'bot' ? (
+          <div className="welcome-screen">
+            <div className="neu-logo-large">
+              <img src="/logo.png" alt="NEU Logo" />
+            </div>
+            <h2>Hi! I am Northeastern University Assistant. What can I help with?</h2>
+            
+            <div className="suggested-questions-grid">
+              {getSuggestedQuestions().map((question, index) => (
+                <button 
+                  key={index}
+                  className="suggested-question"
+                  onClick={() => handleSuggestedQuestion(question)}
+                >
+                  <MessageSquare size={18} className="suggested-question-icon" />
+                  <span>{question}</span>
+                </button>
+              ))}
+            </div>
+            
+            <div className="namespace-options">
+              <button
+                className={`namespace-option ${namespace === 'course' ? 'active' : ''}`}
+                onClick={() => handleSpecialAction('course')}
+              >
+                <div className="namespace-icon">
+                  <BookOpen 
+                    size={18} 
+                    style={{color: namespace === 'course' ? 'white' : '#cc0000'}}/>
+                </div>
+                <div className="namespace-info">
+                  <span>Course Offerings</span>
+                </div>
+              </button>
+
+              <button
+                className={`namespace-option ${namespace === 'classroom' ? 'active' : ''}`}
+                onClick={() => handleSpecialAction('classroom')}
+              >
+                <div className="namespace-icon">
+                  <School
+                    size={18} 
+                    style={{color: namespace === 'classroom' ? 'white' : '#cc0000'}}/>
+                </div>
+                <div className="namespace-info">
+                  <span>Study Spot Finder</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="messages">
               {visibleMessages.map((message, index) => (
                 <MessageComponent
                   key={`${message.query_id || `msg_${index}_${message.timestamp}`}`}
@@ -1311,7 +1359,7 @@ function App({ user, onLogout }) {
                   <button
                     className={`namespace-icon-btn course ${namespace === 'course' ? 'active' : ''}`}
                     onClick={() => setNamespace(namespace === 'course' ? 'default' : 'course')}
-                    title="Course"
+                    title="Course Offerings"
                   >
                     <BookOpen size={16} />
                   </button>
@@ -1319,7 +1367,7 @@ function App({ user, onLogout }) {
                   <button
                     className={`namespace-icon-btn classroom ${namespace === 'classroom' ? 'active' : ''}`}
                     onClick={() => setNamespace(namespace === 'classroom' ? 'default' : 'classroom')}
-                    title="Classroom"
+                    title="Study Spot Finder"
                   >
                     <School size={16} />
                   </button>
@@ -1330,17 +1378,17 @@ function App({ user, onLogout }) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyPress}
-                placeholder="Ask a question about Northeastern University..."
+                placeholder={getPlaceholderText()}
                 rows="1"
               />              
               {/* Deep search toggle */}
               <div className="search-tools">
                 <button 
-                  className={`search-tool-btn ${deepSearchMode ? 'active' : ''}`}
+                  className={`deepsearch-btn ${deepSearchMode ? 'active' : ''}`}
                   onClick={toggleDeepSearch}
-                  title={deepSearchMode ? "Disable Deep Research" : "Enable Deep Research"}
+                  title={deepSearchMode ? "Disable DeepSearch" : "Enable DeepSearch"}
                 >
-                  <Radar size={20} />
+                  DeepSearch
                 </button>
               </div>
               

@@ -3,15 +3,9 @@ import json
 import sys
 import time
 import uuid
-import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
 from main import ask_question, clean_answer  # Import your RAG system
-
-from dotenv import load_dotenv
-load_dotenv()
-
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -94,5 +88,4 @@ def healthcheck():
 
 if __name__ == '__main__':
     # Run the Flask app on port 5001 (different from Node.js)
-   port = int(os.environ.get("PORT", 8080))
-   app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=5001)
