@@ -5,6 +5,7 @@ Contains all configurable parameters in one centralized location.
 
 import logging
 from typing import Dict, Any
+import os 
 
 # Set up logging
 logging.basicConfig(
@@ -14,10 +15,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-OPENAI_API_KEY = 
-GOOGLE_API_KEY = 
-COHERE_API_KEY = 
-PINECONE_API_KEY = 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+PINECONE_API_KEY =os.getenv("PINECONE_API_KEY")
 
 
 # Pinecone index name
