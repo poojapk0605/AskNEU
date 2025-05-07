@@ -9,9 +9,9 @@ spec:
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
-  commonName: "chat.poojacloud24.pw"
+  commonName: "askneu.com"
   dnsNames:
-    - "chat.poojacloud24.pw"
+    - "askneu.com"
   usages:
     - digital signature
     - key encipherment

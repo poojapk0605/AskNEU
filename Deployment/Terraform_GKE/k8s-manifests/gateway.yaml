@@ -12,7 +12,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "chat.poojacloud24.pw"
+    - "askneu.com"
   - port:
       number: 443
       name: https
@@ -21,4 +21,4 @@ spec:
       mode: SIMPLE
       credentialName: frontend-cert-tls
     hosts:
-    - "chat.poojacloud24.pw"
+    - "askneu.com"

@@ -482,8 +482,8 @@ function App({ user, onLogout }) {
       return [
         "Can you suggest a good study spot on campus for Monday at 2 PM where I can stay for a few hours?",
         "What are my options for finding a study spot in Churchill Hall on Monday afternoon?",
-        "Is Dodge Hall 050 available for two hours on Monday?",
-        "What are the hours for ISEC study spaces?"
+        "International Village 018 available for study for one hour on Monday ?",
+        "Can you give me the class schedule for Room 229 in Richards 229 Hall on Monday?"
       ];
     } else {
       return [

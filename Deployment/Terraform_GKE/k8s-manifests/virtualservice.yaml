@@ -5,7 +5,7 @@ metadata:
   namespace: frontend
 spec:
   hosts:
-  - "chat.poojacloud24.pw"
+  - "askneu.com"
   gateways:
   - istio-ingress/frontend-gateway
   http:
