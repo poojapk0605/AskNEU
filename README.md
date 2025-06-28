@@ -45,7 +45,7 @@ AskNEU is a Retrieval-Augmented Generation (RAG) chatbot designed to answer ques
 
 ---
 
-## 📊 Diagram (Optional)
+## 📊 Diagram 
 ![image](https://github.com/user-attachments/assets/9953f038-09f0-48e7-9082-e17365088f13)
 
 ---
